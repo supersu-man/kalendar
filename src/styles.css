@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);    
+    padding: 10px;
+}
+
+.hover {
+    
+    transition: 300ms;
+}
+
+.hover:hover {
+    transform:scale(1.06);
+}

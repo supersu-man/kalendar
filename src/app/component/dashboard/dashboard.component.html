@@ -1,0 +1,54 @@
+<div class="container-fluid h-100">
+    <div class="row align-items-center" style="height: 50px;">
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary btn-sm" (click)="today()">Today</button>
+        </div>
+        <div class="col-auto" role="button" (click)="prevMonth()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+        </div>
+        <div class="col-auto text-center" style="width: 150px;">
+            <span class="mx-auto">
+                {{currentDate | date: 'MMMM yyyy' }}
+            </span>
+        </div>
+        <div class="col-auto" role="button" (click)="nextMonth()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+            </svg>
+        </div>
+        <div class="col-auto ms-auto">
+            <button class="btn btn-outline-secondary btn-sm" (click)="logout()" routerLink="/">Logout</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="wrapper" style="height: 50px;">
+            <div class="m-auto">Sunday</div>
+            <div class="m-auto">Monday</div>
+            <div class="m-auto">Tuesday</div>
+            <div class="m-auto">Wednesday</div>
+            <div class="m-auto">Thursday</div>
+            <div class="m-auto">Friday</div>
+            <div class="m-auto">Saturday</div>
+        </div>
+    </div>
+    <div class="row" style="height: calc(100% - 100px)">
+        <div class="col wrapper">
+            @for (item of items; track $index) {
+            <div class="row card m-1 hover" role="button">
+                <div class="col-12">
+                    {{item.date}}
+                </div>
+                @for (event of item.events; track $index) {
+                <div class="col-12">
+                    {{event.tag}}
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+
+
+</div>

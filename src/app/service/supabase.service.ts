@@ -15,6 +15,9 @@ export class SupabaseService {
       if (event == 'TOKEN_REFRESHED') {
         localStorage.setItem('accessToken', session?.access_token as string)
       }
+      if (event == 'INITIAL_SESSION' && session?.access_token) {
+        localStorage.setItem('accessToken', session?.access_token as string)
+      }
     })
   }
 

@@ -16,7 +16,7 @@ export class HomeComponent {
   isloggedIn = false
 
   constructor(private supabaseService: SupabaseService) {
-    supabaseService.getAccessToken().then((token) => {
+    this.supabaseService.getAccessToken().then((token) => {
       console.log(token)
       if(token) this.isloggedIn=true
     })

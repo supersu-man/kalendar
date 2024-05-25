@@ -8,18 +8,9 @@ import { environment } from '../../environments/environment';
 })
 export class SupabaseService {
 
-  private supabaseClient = createClient(environment.url, environment.key)
+  supabaseClient = createClient(environment.url, environment.key)
 
-  constructor() {
-    this.supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event == 'TOKEN_REFRESHED') {
-        localStorage.setItem('accessToken', session?.access_token as string)
-      }
-      if (event == 'INITIAL_SESSION' && session?.access_token) {
-        localStorage.setItem('accessToken', session?.access_token as string)
-      }
-    })
-  }
+  constructor(private userService: UserService) {}
 
   async getAccessToken() {
     let token = (await this.supabaseClient.auth.getSession()).data.session?.access_token

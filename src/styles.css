@@ -5,10 +5,9 @@ body {
     height: 100%;
 }
 
-.wrapper {
+.grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);    
-    padding: 10px;
+    grid-template-columns: repeat(7, 1fr);
 }
 
 .hover {

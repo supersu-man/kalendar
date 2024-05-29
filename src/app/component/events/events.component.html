@@ -1,0 +1,70 @@
+<div class="container py-4">
+    <div class="row align-items-center mb-4">
+        <div class="col fs-1">
+            {{dateObj | date: 'dd MMMM yyyy'}}
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary btn-sm" (click)="eventForm.reset();dialog?.show()">Add Event</button>
+        </div>
+    </div>
+
+    @for (event of events; track $index) {
+    <div class="card p-2 my-1" role="button" (click)="eventForm.patchValue(event);dialog?.show()">
+        <div class="row">
+            <div class="col">
+                {{event.tag.name}}
+            </div>
+            <div class="col-auto">
+                <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{event.description}}
+            </div>
+        </div>
+    </div>
+    }
+</div>
+
+<div class="modal fade" id="eventDialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">{{eventForm.getRawValue().id ? 'Update event' : 'Add event'}}</h1>
+            </div>
+
+            <div class="modal-body container" [formGroup]="eventForm">
+                <div class="row py-1">
+                    <div class="col">
+                        <select class="form-select" formControlName="tag_id">
+                            @for (tag of tags; track $index) {
+                            <option [value]="tag.id">{{tag.name}}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row py-1">
+                    <div class="col">
+                        <textarea class="form-control" rows="3" formControlName="description"
+                            placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                @if (eventForm.getRawValue().id) {
+                <button type="button" class="btn btn-danger me-auto" (click)="deleteEvent()">Delete</button>
+                }
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="dialog?.hide()">Close</button>
+                <button type="button" class="btn btn-primary"
+                    (click)="eventForm.getRawValue().id ? updateEvent() : addEvent()"
+                    [disabled]="!eventForm.valid">{{eventForm.getRawValue().id ? 'Update' : 'Add'}}</button>
+            </div>
+
+        </div>
+    </div>
+</div>

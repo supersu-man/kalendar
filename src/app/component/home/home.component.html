@@ -9,16 +9,38 @@
             Welcome to Kalendar
         </div>
         <div class="col-12 fs-4">
-            Remember all your events 
+            Remember all your events
         </div>
     </div>
     <div class="row py-2">
         <div class="col-12">
             @if (isloggedIn) {
-                <div class="btn btn-primary btn-sm" routerLink="/dashboard">Dashboard</div>
+            <div class="btn btn-primary btn-sm" routerLink="/dashboard">Dashboard</div>
             } @else {
-                <div class="btn btn-primary btn-sm" (click)="login()">Login</div>
+            <div class="btn btn-primary btn-sm" (click)="login()">Login</div>
             }
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="registerModel" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Register Account?</h1>
+            </div>
+
+            <div class="modal-body">
+                Account doesn't exist with this email. Create a new account?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="logout()">No</button>
+                <button type="button" class="btn btn-primary" (click)="registerAccount()">Yes</button>
+            </div>
+
         </div>
     </div>
 </div>

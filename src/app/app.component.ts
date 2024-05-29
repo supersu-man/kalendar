@@ -15,11 +15,9 @@ export class AppComponent {
 
     this.supabaseService.supabaseClient.auth.onAuthStateChange((event, session) => {
       if (event == 'TOKEN_REFRESHED') {
-        console.log(session?.access_token)
         localStorage.setItem('accessToken', session?.access_token as string)
       }
       if (event == 'INITIAL_SESSION' && session?.access_token) {
-        console.log(session?.access_token)
         localStorage.setItem('accessToken', session?.access_token as string)
       }
     })

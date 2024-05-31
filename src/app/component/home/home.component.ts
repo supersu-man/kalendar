@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SupabaseService } from '../../service/supabase.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -14,28 +14,33 @@ import * as bootstrap from 'bootstrap';
   templateUrl: './home.component.html',
   styles: ``
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
+  modal: bootstrap.Modal | undefined
   isloggedIn = false
 
   constructor(private supabaseService: SupabaseService, private httpClient: HttpClient) {
+
+  }
+
+  ngOnInit(): void {
+    const element = document.getElementById('registerModel') as Element
+    this.modal = new bootstrap.Modal(element, {})
+
     this.supabaseService.getAccessToken().then((token) => {
       if (!token) return
-
-      httpClient.get(environment.endpoint + '/user', { headers: { Authorization: token } }).subscribe({
+      this.httpClient.get(environment.endpoint + '/user', { headers: { Authorization: token } }).subscribe({
         next: (value) => {
           this.isloggedIn = true
+          this.modal?.hide()
         },
         error: (err: HttpErrorResponse) => {
-          console.log(err)
-          if (err.status == 404) {
-            const element = document.getElementById('registerModel') as Element
-            new bootstrap.Modal(element, {}).show()
-          }
+          if (err.status == 404) this.modal?.show()
+          else console.log(err)
         }
       })
-
     })
+
   }
 
   login() {
@@ -51,10 +56,8 @@ export class HomeComponent {
     const headers = { Authorization: token }
     this.httpClient.post(environment.endpoint + '/user', {}, { headers }).subscribe({
       next: (value) => {
-        console.log(value)
         this.isloggedIn = true
-        const element = document.getElementById('registerModel') as Element
-        new bootstrap.Modal(element, {}).show()
+        this.modal?.hide()
       },
       error: (err) => {
         console.log(err)

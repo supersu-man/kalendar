@@ -1,8 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
+@font-face {
+    font-family: Inter;
+    src: url(assets/Inter.ttf) format("opentype");
+}
+
 html,
 body {
     height: 100%;
+    font-family: 'Inter';
 }
 
 .grid {
@@ -11,10 +17,13 @@ body {
 }
 
 .hover {
-    
     transition: 300ms;
 }
 
 .hover:hover {
-    transform:scale(1.06);
+    transform: scale(1.06);
+}
+
+.offcanvas-active-button {
+    background-color: #a2ddff;
 }

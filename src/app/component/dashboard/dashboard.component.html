@@ -1,61 +1,40 @@
-<div class="container-fluid h-100">
-    <div class="row align-items-center" style="height: 50px;">
-        <div class="col-auto">
-            <button class="btn btn-outline-secondary btn-sm" (click)="today()">Today</button>
-        </div>
-        <div class="col-auto" role="button" (click)="prevMonth()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-            </svg>
-        </div>
-        <div class="col-auto text-center" style="width: 150px;">
-            <span class="mx-auto">
-                {{currentDate | date: 'MMMM yyyy' }}
-            </span>
-        </div>
-        <div class="col-auto" role="button" (click)="nextMonth()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-            </svg>
-        </div>
-        <div class="col-auto ms-auto">
-            <button class="btn btn-outline-secondary btn-sm" routerLink="/tags">Tags</button>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-outline-secondary btn-sm" (click)="logout()">Logout</button>
-        </div>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" style="width: 170px; background-color: #e2f1fc;">
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
-    <div class="row grid p-3" style="height: 50px;">
-        <div class="m-auto">Sunday</div>
-        <div class="m-auto">Monday</div>
-        <div class="m-auto">Tuesday</div>
-        <div class="m-auto">Wednesday</div>
-        <div class="m-auto">Thursday</div>
-        <div class="m-auto">Friday</div>
-        <div class="m-auto">Saturday</div>
-    </div>
-    <div class="row grid p-3" style="height: calc(100% - 100px)">
-        @for (item of items; track $index) {
-        <div class="col position-relative">
-            @if (item.date) {
-            <div class="card top-0 start-0 end-0 bottom-0 hover position-absolute m-1" style="overflow: hidden;"
-                role="button" [routerLink]="currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+item.date">
-                <div class="p-1">
-                    {{item.date}}
-                </div>
-                <div class="text-end">
-                    @for (event of item.events; track $index) {
-                    <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">{{event.tag.name}}</div>
-                    }
-                </div>
+    <div class="offcanvas-body container-fluid d-flex flex-column px-4">
 
+        <div class="row text-center rounded-3 mb-2 py-1" role="button" routerLink="calendar" routerLinkActive="offcanvas-active-button" data-bs-dismiss="offcanvas">
+            <div class="col">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
+                    <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+                    <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                </svg>
+                <div>Calendar</div>
             </div>
-            }
         </div>
-        }
+
+        <div class="row text-center rounded-3 py-1" role="button" routerLink="tags" routerLinkActive="offcanvas-active-button" data-bs-dismiss="offcanvas">
+            <div class="col">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+                    <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z"/>
+                    <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1z"/>
+                </svg>
+                <div>Tags</div>
+            </div>
+        </div>
+
+        <div class="row text-center mt-auto text-white rounded-3 py-1" role="button" (click)="logout()" style="background-color: #FA6161;">
+            <div class="col">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                </svg>
+                <div>Logout</div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+<router-outlet></router-outlet>

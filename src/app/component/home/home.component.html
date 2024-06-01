@@ -15,14 +15,13 @@
     <div class="row py-2">
         <div class="col-12">
             @if (isloggedIn) {
-            <div class="btn btn-primary btn-sm" routerLink="/dashboard">Dashboard</div>
+            <div class="btn btn-primary btn-sm" routerLink="/dashboard/calendar">Dashboard</div>
             } @else {
             <div class="btn btn-primary btn-sm" (click)="login()">Login</div>
             }
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="registerModel" tabindex="-1">
     <div class="modal-dialog">

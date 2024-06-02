@@ -19,6 +19,7 @@ export class CalendarComponent {
 
   items: any = []
   currentDate = new Date()
+  todayDate = new Date()
 
   constructor(private httpClient: HttpClient) {
     this.getMonthDates()
@@ -31,13 +32,9 @@ export class CalendarComponent {
     for (let index = 0; index < firstDay; index++) {
       this.items.push({})
     }
-    var theDate = this.currentDate
     for (let index = 0; index < daysInMonth; index++) {
-      const offset = theDate.getTimezoneOffset()
-      theDate = new Date(theDate.getTime() - (offset*60*1000))
-      theDate.setDate(index+1)
       this.items.push({
-        fullDate: theDate.toISOString().split('T')[0],
+        fullDate: this.currentDate.getFullYear()+'-'+(this.currentDate.getMonth()+1)+'-'+(index+1),
         date: index + 1
       })
     }

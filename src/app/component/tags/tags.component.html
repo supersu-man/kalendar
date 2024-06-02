@@ -1,29 +1,36 @@
-<div class="container py-4">
+<div class="container-fluid p-3">
     <div class="row mb-4">
-        <div class="col-auto me-auto">
-            <button class="btn btn-outline-secondary btn-sm" routerLink="/dashboard">Dashboard</button>
+        <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+            </svg>
         </div>
         <div class="col-auto ms-auto">
-            <button class="btn btn-outline-secondary btn-sm" (click)="tag_form.reset();dialog?.show()">Create Tag</button>
         </div>
     </div>
-
+</div>
+<div class="container">
     @for (item of tags; track $index) {
-    <div class="card p-2 my-1" role="button" (click)="tag_form.patchValue(item);dialog?.show()">
-        <div class="row align-items-center">
-            <div class="col-6">
-                {{item.name}}
-            </div>
-            <div class="col">
-                {{item.color}}
-            </div>
-            <div class="col">
-                <input type="color" class="form-control form-control-color" [value]="item.color" disabled>
-            </div>
+    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" (click)="tag_form.patchValue(item);dialog?.show()" style="background-color: #ECF6FF;">
+        <div class="col-6">
+            {{item.name}}
+        </div>
+        <div class="col">
+            {{item.color}}
+        </div>
+        <div class="col">
+            <input type="color" class="form-control form-control-color" [value]="item.color" disabled>
         </div>
     </div>
     }
 </div>
+
+<button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3"
+    (click)="tag_form.reset();dialog?.show()">Create Tag</button>
+
+
 
 <div class="modal fade" id="tagDialog" tabindex="-1">
     <div class="modal-dialog">
@@ -46,11 +53,14 @@
 
             <div class="modal-footer">
                 @if (tag_form.getRawValue().id) {
-                    <button type="button" class="btn btn-danger me-auto" (click)="deleteTag()">Delete</button>
+                <button type="button" class="btn btn-danger me-auto" (click)="deleteTag()">Delete</button>
                 }
 
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="dialog?.hide()">Close</button>
-                <button type="button" class="btn btn-primary" (click)="tag_form.getRawValue().id ? updateTag() : createTag()" [disabled]="!tag_form.valid">{{tag_form.getRawValue().id ? 'Update' : 'Create'}}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="dialog?.hide()">Close</button>
+                <button type="button" class="btn btn-primary"
+                    (click)="tag_form.getRawValue().id ? updateTag() : createTag()"
+                    [disabled]="!tag_form.valid">{{tag_form.getRawValue().id ? 'Update' : 'Create'}}</button>
             </div>
 
         </div>

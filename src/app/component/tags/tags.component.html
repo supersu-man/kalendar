@@ -3,11 +3,11 @@
         <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
                 viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
             </svg>
         </div>
-        <div class="col-auto ms-auto">
+        <div class="col fs-5">
+            Tags
         </div>
     </div>
 </div>
@@ -30,7 +30,11 @@
 <button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3"
     (click)="tag_form.reset();dialog?.show()">Create Tag</button>
 
-
+@if (tags.length == 0) {
+<div class="position-absolute start-50 top-50 translate-middle">
+    No tags, add them.
+</div>
+}
 
 <div class="modal fade" id="tagDialog" tabindex="-1">
     <div class="modal-dialog">

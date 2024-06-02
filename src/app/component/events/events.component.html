@@ -1,31 +1,42 @@
-<div class="container py-4">
-    <div class="row align-items-center mb-4">
-        <div class="col fs-1">
+<div class="container-fluid p-3">
+    <div class="row mb-4">
+        <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+            </svg>
+        </div>
+        <div class="col fs-5">
             {{dateObj | date: 'dd MMMM yyyy'}}
         </div>
-        <div class="col-auto">
-            <button class="btn btn-outline-secondary btn-sm" (click)="eventForm.reset();dialog?.show()">Add Event</button>
-        </div>
     </div>
+</div>
 
+<div class="container">
     @for (event of events; track $index) {
-    <div class="card p-2 my-1" role="button" (click)="eventForm.patchValue(event);dialog?.show()">
-        <div class="row">
-            <div class="col">
-                {{event.tag.name}}
-            </div>
-            <div class="col-auto">
-                <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
-            </div>
+    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" (click)="eventForm.patchValue(event);dialog?.show()" style="background-color: #ECF6FF;">
+        <div class="col">
+            {{event.tag.name}}
         </div>
-        <div class="row">
-            <div class="col">
-                {{event.description}}
-            </div>
+        <div class="col-auto">
+            <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+        </div>
+        <div class="col-12">
+            {{event.description}}
         </div>
     </div>
     }
 </div>
+
+@if (events.length == 0) {
+<div class="position-absolute start-50 top-50 translate-middle">
+    No events, add them.
+</div>
+}
+
+<button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3"
+    (click)="eventForm.reset();dialog?.show()">Add Event</button>
+
 
 <div class="modal fade" id="eventDialog" tabindex="-1">
     <div class="modal-dialog">

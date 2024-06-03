@@ -19,7 +19,7 @@ export class CalendarComponent {
 
   items: any = []
   currentDate = new Date()
-  todayDate = new Date()
+  todayDate = this.yymmdd(new Date())
 
   constructor(private httpClient: HttpClient) {
     this.getMonthDates()
@@ -33,8 +33,10 @@ export class CalendarComponent {
       this.items.push({})
     }
     for (let index = 0; index < daysInMonth; index++) {
+      const tempDate = new Date(this.currentDate)
+      tempDate.setDate(index+1)
       this.items.push({
-        fullDate: this.currentDate.getFullYear()+'-'+(this.currentDate.getMonth()+1)+'-'+(index+1),
+        fullDate: this.yymmdd(tempDate),
         date: index + 1
       })
     }
@@ -50,7 +52,7 @@ export class CalendarComponent {
     const params = { date, eDate }
     this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
       next: (res: any) => {
-        this.items.forEach((element: any) => element.events = res.filter((a:any) => a.date === element.fullDate));
+        this.items.forEach((element: any) => element.events = res.filter((a: any) => a.date === element.fullDate));
       },
       error: (err) => {
         console.log(err)
@@ -74,5 +76,13 @@ export class CalendarComponent {
     this.currentDate = new Date()
     this.getMonthDates()
   }
+
+
+  yymmdd(date: Date) {
+    var mm = date.getMonth() + 1;
+    var dd = date.getDate();
+    return [date.getFullYear(), (mm>9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd].join('-');
+  }
+
 
 }

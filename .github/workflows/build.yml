@@ -16,7 +16,7 @@ jobs:
           text: ${{ github.event.head_commit.message }}
           regex: '^[0-9]+\.[0-9]+\.[0-9]+$'
       
-      - name: Build
+      - name: Test Build
         if: ${{ steps.regex-match.outputs.match == '' }}
         run: |
           npm i

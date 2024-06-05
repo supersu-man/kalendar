@@ -5,6 +5,8 @@ import { environment } from '../../../environments/environment';
 import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Modal } from 'bootstrap';
+import { AlertService } from '../../service/alert.service';
+import { AlertType } from '../../model/alert';
 
 @Component({
   selector: 'app-date',
@@ -30,7 +32,7 @@ export class EventsComponent implements OnInit {
   events: any = []
   tags: any = []
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient) { }
+  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private alertService: AlertService) { }
 
   ngOnInit(): void {
     const element = document.getElementById('eventDialog') as Element
@@ -48,6 +50,10 @@ export class EventsComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error getting tags',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -62,6 +68,10 @@ export class EventsComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error getting events',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -74,9 +84,17 @@ export class EventsComponent implements OnInit {
       next: (res) => {
         this.dialog?.hide()
         this.getEvents()
+        this.alertService.showAlert({
+          message: 'Sucessfully deleted event',
+          type: AlertType.Success
+        })
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error deleting event',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -89,9 +107,17 @@ export class EventsComponent implements OnInit {
       next: (res) => {
         this.getEvents()
         this.dialog?.hide()
+        this.alertService.showAlert({
+          message: 'Sucessfully added event',
+          type: AlertType.Success
+        })
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error adding event',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -104,9 +130,17 @@ export class EventsComponent implements OnInit {
       next: (res) => {
         this.dialog?.hide()
         this.getEvents()
+        this.alertService.showAlert({
+          message: 'Sucessfully updating event',
+          type: AlertType.Success
+        })
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error updating event',
+          type: AlertType.Error
+        })
       }
     })
   }

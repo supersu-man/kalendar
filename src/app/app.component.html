@@ -1,1 +1,8 @@
+
+@for (alert of alertService.alerts; track $index) {
+    <div class="alert alert-dismissible" [class]="'alert-'+alert.type" role="alert">
+        {{alert.message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 <router-outlet />

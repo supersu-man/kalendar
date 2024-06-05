@@ -4,6 +4,8 @@ import { SupabaseService } from '../../service/supabase.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import * as bootstrap from 'bootstrap';
+import { AlertService } from '../../service/alert.service';
+import { Alert, AlertType } from '../../model/alert';
 
 @Component({
   selector: 'app-home',
@@ -19,9 +21,7 @@ export class HomeComponent implements OnInit {
   modal: bootstrap.Modal | undefined
   isloggedIn = false
 
-  constructor(private supabaseService: SupabaseService, private httpClient: HttpClient) {
-
-  }
+  constructor(private supabaseService: SupabaseService, private httpClient: HttpClient, private alertService: AlertService) { }
 
   ngOnInit(): void {
     const element = document.getElementById('registerModel') as Element
@@ -36,15 +36,21 @@ export class HomeComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => {
           if (err.status == 404) this.modal?.show()
-          else console.log(err)
+          else {
+            console.log(err)
+            this.alertService.showAlert({
+              message: 'Error getting user',
+              type: AlertType.Error
+            })
+          }
         }
       })
     })
 
   }
 
-  login() {
-    this.supabaseService.signIn()
+  async login() {
+    await this.supabaseService.signIn()
   }
 
   logout() {
@@ -61,6 +67,10 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error registering',
+          type: AlertType.Error
+        })
       }
     })
   }

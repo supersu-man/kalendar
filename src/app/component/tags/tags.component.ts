@@ -5,6 +5,8 @@ import { UserService } from '../../service/user.service';
 import { Modal } from 'bootstrap';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AlertService } from '../../service/alert.service';
+import { AlertType } from '../../model/alert';
 
 @Component({
   selector: 'app-tags',
@@ -22,10 +24,10 @@ export class TagsComponent implements OnInit {
   tag_form = new FormGroup({
     id: new FormControl(null),
     name: new FormControl(null, [Validators.required]),
-    color: new FormControl(null, [Validators.required])
+    color: new FormControl('#000000', [Validators.required])
   })
 
-  constructor(private userService: UserService, private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private alertService: AlertService) {}
 
   ngOnInit(): void {
     const element = document.getElementById('tagDialog') as Element
@@ -39,10 +41,13 @@ export class TagsComponent implements OnInit {
     this.httpClient.get(environment.endpoint + '/tag', { headers }).subscribe({
       next: (res) => {
         this.tags = res
-        console.log(res)
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error getting tags',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -54,9 +59,17 @@ export class TagsComponent implements OnInit {
       next: (res) => {
         this.getTags()
         this.dialog?.hide()
+        this.alertService.showAlert({
+          message: 'Sucessfully added tag',
+          type: AlertType.Success
+        })
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error adding tag',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -68,9 +81,17 @@ export class TagsComponent implements OnInit {
       next: (res) => {
         this.getTags()
         this.dialog?.hide()
+        this.alertService.showAlert({
+          message: 'Sucessfully updated tag',
+          type: AlertType.Success
+        })
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error updating tag',
+          type: AlertType.Error
+        })
       }
     })
   }
@@ -82,9 +103,17 @@ export class TagsComponent implements OnInit {
       next: (res) => {
         this.getTags()
         this.dialog?.hide()
+        this.alertService.showAlert({
+          message: 'Sucessfully deleted tag',
+          type: AlertType.Success
+        })
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error deleting tag',
+          type: AlertType.Error
+        })
       }
     })
   }

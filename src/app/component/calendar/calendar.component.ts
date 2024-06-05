@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AlertService } from '../../service/alert.service';
+import { AlertType } from '../../model/alert';
 
 @Component({
   selector: 'app-calendar',
@@ -21,7 +23,7 @@ export class CalendarComponent {
   currentDate = new Date()
   todayDate = this.yymmdd(new Date())
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private alertService: AlertService) {
     this.getMonthDates()
   }
 
@@ -56,6 +58,10 @@ export class CalendarComponent {
       },
       error: (err) => {
         console.log(err)
+        this.alertService.showAlert({
+          message: 'Error getting events',
+          type: AlertType.Error
+        })
       }
     })
   }

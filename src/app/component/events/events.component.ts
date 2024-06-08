@@ -17,8 +17,9 @@ import { AlertType } from '../../model/alert';
 })
 export class EventsComponent implements OnInit {
 
-  date = this.route.snapshot.paramMap.get('date') as string
-  dateObj = new Date(this.date)
+  date = this.route.snapshot.paramMap.get('date') as unknown as number
+  month = this.route.snapshot.paramMap.get('month') as unknown as number
+  year = this.route.snapshot.paramMap.get('year') as unknown as number
 
   dialog: Modal | undefined
 
@@ -61,7 +62,7 @@ export class EventsComponent implements OnInit {
   getEvents = () => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
-    const params = { date: this.date }
+    const params = { date: `${this.year}-${this.month}-${this.date}` }
     this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
       next: (res) => {
         this.events = res
@@ -103,7 +104,7 @@ export class EventsComponent implements OnInit {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     const body = this.eventForm.getRawValue()
-    this.httpClient.post(environment.endpoint + '/event', { ...body, date: this.date }, { headers }).subscribe({
+    this.httpClient.post(environment.endpoint + '/event', { ...body, date: `${this.year}-${this.month}-${this.date}` }, { headers }).subscribe({
       next: (res) => {
         this.getEvents()
         this.dialog?.hide()
@@ -126,7 +127,7 @@ export class EventsComponent implements OnInit {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     const body = this.eventForm.getRawValue()
-    this.httpClient.patch(environment.endpoint + '/event', { ...body, date: this.date }, { headers }).subscribe({
+    this.httpClient.patch(environment.endpoint + '/event', { ...body, date: `${this.year}-${this.month}-${this.date}` }, { headers }).subscribe({
       next: (res) => {
         this.dialog?.hide()
         this.getEvents()

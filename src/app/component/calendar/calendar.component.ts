@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { CommonModule, DatePipe } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AlertService } from '../../service/alert.service';
 import { AlertType } from '../../model/alert';
 
@@ -17,34 +17,38 @@ import { AlertType } from '../../model/alert';
   templateUrl: './calendar.component.html',
   styles: ``
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
+
+  year = this.route.snapshot.paramMap.get('year') as unknown as number
+  month = this.route.snapshot.paramMap.get('month') as unknown as number
 
   items: any = []
-  currentDate = new Date()
-  todayDate = this.yymmdd(new Date())
+  todayDate = new DatePipe('en-US').transform(new Date(), 'yyyy-MM-dd')
 
-  constructor(private httpClient: HttpClient, private alertService: AlertService) {
-    this.getMonthDates()
+  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private alertService: AlertService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.year = params['year'] as number
+      this.month = params['month'] as number
+      this.getMonthDates()
+    })
   }
 
   getMonthDates() {
-    var daysInMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 0).getDate();
-    var firstDay = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), 1).getDay();
+    var daysInMonth = new Date(this.year, this.month, 0).getDate();
+    var firstDay = new Date(this.year, this.month-1, 1).getDay();
     this.items = []
     for (let index = 0; index < firstDay; index++) {
       this.items.push({})
     }
     for (let index = 0; index < daysInMonth; index++) {
-      const tempDate = new Date(this.currentDate)
-      tempDate.setDate(index+1)
-      this.items.push({
-        fullDate: this.yymmdd(tempDate),
-        date: index + 1
-      })
+      this.items.push({ fullDate: `${new DatePipe('en-US').transform(this.year+'-'+this.month+'-'+(index+1), 'yyyy-MM-dd')}` })
     }
+    console.log(this.items)
 
-    const sDate = `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() + 1}-1`
-    const eDate = `${this.currentDate.getFullYear()}-${this.currentDate.getMonth() + 1}-${daysInMonth}`
+    const sDate = `${this.year}-${this.month}-01`
+    const eDate = `${this.year}-${this.month}-${daysInMonth}`
     this.getEvents(sDate, eDate)
   }
 
@@ -67,28 +71,28 @@ export class CalendarComponent {
   }
 
   nextMonth() {
-    this.currentDate.setMonth(this.currentDate.getMonth() + 1)
-    this.currentDate = new Date(this.currentDate)
-    this.getMonthDates()
+    const date = new Date()
+    date.setFullYear(this.year)
+    date.setMonth(this.month)
+    this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
   }
 
   prevMonth() {
-    this.currentDate.setMonth(this.currentDate.getMonth() - 1)
-    this.currentDate = new Date(this.currentDate)
-    this.getMonthDates()
+    const date = new Date()
+    date.setFullYear(this.year)
+    date.setMonth(this.month-2)
+    this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
   }
 
   today() {
-    this.currentDate = new Date()
-    this.getMonthDates()
+    const today = new Date()
+    this.year = today.getFullYear()
+    this.month = today.getMonth() + 1
+    this.router.navigateByUrl(`/dashboard/calendar`)
   }
 
 
-  yymmdd(date: Date) {
-    var mm = date.getMonth() + 1;
-    var dd = date.getDate();
-    return [date.getFullYear(), (mm>9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd].join('-');
-  }
+
 
 
 }

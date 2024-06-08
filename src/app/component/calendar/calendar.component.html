@@ -11,7 +11,7 @@
             </svg>
         </div>
         <div class="col-auto text-center" style="width: 150px;">
-            <span class="mx-auto">{{currentDate | date: 'MMMM yyyy'}}</span>
+            <span class="mx-auto">{{year+'-'+month+'-01' | date: 'MMMM yyyy'}}</span>
         </div>
         <div class="col-auto" role="button" (click)="nextMonth()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
@@ -40,11 +40,11 @@
             <div class="row grid h-100 p-2" >
                 @for (item of items; track $index) {
                 <div class="col position-relative">
-                    @if (item.date) {
+                    @if (item.fullDate) {
                     <div class="card top-0 start-0 end-0 bottom-0 hover position-absolute m-1 rounded-3" style="overflow: hidden;"
-                        role="button" [routerLink]="currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+item.date">
+                        role="button" [routerLink]="item.fullDate | date: 'dd'">
                             <div class="m-2 p-1 rounded-3 text-center" style="width: 35px;" [style]="todayDate == item.fullDate ? 'background-color: #a2ddff;': ''">
-                                {{item.date}}
+                                {{item.fullDate | date: 'dd'}}
                             </div>
                         <div class="text-end">
                             @for (event of item.events; track $index) {

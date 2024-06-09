@@ -1,5 +1,5 @@
-<div class="container-fluid h-100 d-flex flex-column p-3">
-    <div class="row justify-content-center">
+<div class="container-fluid d-flex flex-column h-100 p-3">
+    <div class="row justify-content-center pb-3">
         <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
@@ -26,35 +26,34 @@
             </svg>
         </div>
     </div>
-    <div class="row m-1 rounded-4 mt-3 h-100" style="background-color: #ECF6FF">
-        <div class="col d-flex flex-column">
-            <div class="row grid text-center p-2">
-                <div class="m-auto">Sunday</div>
-                <div class="m-auto">Monday</div>
-                <div class="m-auto">Tuesday</div>
-                <div class="m-auto">Wednesday</div>
-                <div class="m-auto">Thursday</div>
-                <div class="m-auto">Friday</div>
-                <div class="m-auto">Saturday</div>
+    <div class="row flex-grow-1 rounded-4 px-1 py-2" style="background-color: #ECF6FF">
+        <div class="col-12 d-flex flex-column">
+            <div class="row grid text-center">
+                <div class="m-auto day-text">Sunday</div>
+                <div class="m-auto day-text">Monday</div>
+                <div class="m-auto day-text">Tuesday</div>
+                <div class="m-auto day-text">Wednesday</div>
+                <div class="m-auto day-text">Thursday</div>
+                <div class="m-auto day-text">Friday</div>
+                <div class="m-auto day-text">Saturday</div>
             </div>
-            <div class="row grid h-100 p-2" >
+            <div class="row grid flex-grow-1">
                 @for (item of items; track $index) {
-                <div class="col position-relative">
-                    @if (item.fullDate) {
-                    <div class="card top-0 start-0 end-0 bottom-0 hover position-absolute m-1 rounded-3" style="overflow: hidden;"
-                        role="button" [routerLink]="item.fullDate | date: 'dd'">
-                            <div class="m-2 p-1 rounded-3 text-center" style="width: 35px;" [style]="todayDate == item.fullDate ? 'background-color: #a2ddff;': ''">
-                                {{item.fullDate | date: 'dd'}}
+                    <div class="col position-relative">
+                        @if (item.fullDate) {
+                        <div class="card top-0 start-0 end-0 bottom-0 hover position-absolute m-1 rounded-3" [class]="todayDate == item.fullDate ? 'today': ''" style="overflow: hidden;" role="button" [routerLink]="item.fullDate | date: 'dd'">
+                                <div class="m-2 p-1 rounded-3 text-center" style="width: 35px;" [style]="todayDate == item.fullDate ? 'background-color: #a2ddff;': ''">
+                                    {{item.fullDate | date: 'dd'}}
+                                </div>
+                            <div class="text-end">
+                                @for (event of item.events; track $index) {
+                                <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">{{event.tag.name}}</div>
+                                }
                             </div>
-                        <div class="text-end">
-                            @for (event of item.events; track $index) {
-                            <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">{{event.tag.name}}</div>
-                            }
                         </div>
+                        }
                     </div>
                     }
-                </div>
-                }
             </div>
         </div>
     </div>

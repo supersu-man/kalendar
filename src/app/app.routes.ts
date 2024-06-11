@@ -6,6 +6,8 @@ import { TagsComponent } from './component/tags/tags.component';
 import { EventsComponent } from './component/events/events.component';
 import { CalendarComponent } from './component/calendar/calendar.component';
 import { DatePipe } from '@angular/common';
+import { PrivacyComponent } from './component/privacy/privacy.component';
+import { AboutComponent } from './component/about/about.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [authGuard] },
@@ -17,4 +19,6 @@ export const routes: Routes = [
             { path: 'tags', component: TagsComponent }
         ]
     },
+    { path: 'privacy', component: PrivacyComponent },
+    { path: 'about', component: AboutComponent }
 ];

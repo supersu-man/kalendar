@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { AlertService } from '../../service/alert.service';
-import { AlertType } from '../../model/alert';
+import { ApiService } from '../../service/api.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
 
 @Component({
   selector: 'app-calendar',
@@ -12,7 +11,8 @@ import { AlertType } from '../../model/alert';
   imports: [
     DatePipe,
     RouterModule,
-    CommonModule
+    CommonModule,
+    EventDialogComponent
   ],
   templateUrl: './calendar.component.html',
   styles: ``
@@ -25,7 +25,19 @@ export class CalendarComponent implements OnInit {
   items: any = []
   todayDate = new DatePipe('en-US').transform(new Date(), 'yyyy-MM-dd')
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private alertService: AlertService, private router: Router) { }
+  view: 'grid' | 'list' = 'grid'
+
+  tags: any = []
+  eventForm = new FormGroup({
+    id: new FormControl(null),
+    date: new FormControl(null),
+    tag_id: new FormControl(null, [Validators.required]),
+    description: new FormControl(null, [Validators.required])
+  })
+  openDialog = new EventEmitter()
+  hideDialog = new EventEmitter()
+
+  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -33,6 +45,7 @@ export class CalendarComponent implements OnInit {
       this.month = params['month'] as number
       this.getMonthDates()
     })
+    this.getTags()
   }
 
   getMonthDates() {
@@ -45,28 +58,10 @@ export class CalendarComponent implements OnInit {
     for (let index = 0; index < daysInMonth; index++) {
       this.items.push({ fullDate: `${new DatePipe('en-US').transform(this.year+'-'+this.month+'-'+(index+1), 'yyyy-MM-dd')}` })
     }
-    console.log(this.items)
-
     const sDate = `${this.year}-${this.month}-01`
     const eDate = `${this.year}-${this.month}-${daysInMonth}`
-    this.getEvents(sDate, eDate)
-  }
-
-  getEvents = (date: string, eDate: string) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    const params = { date, eDate }
-    this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
-      next: (res: any) => {
-        this.items.forEach((element: any) => element.events = res.filter((a: any) => a.date === element.fullDate));
-      },
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error getting events',
-          type: AlertType.Error
-        })
-      }
+    this.apiService.getEventsRange(sDate, eDate, (events) => {
+      this.items.forEach((element: any) => element.events = events.filter((a: any) => a.date === element.fullDate));
     })
   }
 
@@ -85,14 +80,27 @@ export class CalendarComponent implements OnInit {
   }
 
   today() {
-    const today = new Date()
-    this.year = today.getFullYear()
-    this.month = today.getMonth() + 1
     this.router.navigateByUrl(`/dashboard/calendar`)
   }
 
+  getTags() {
+    this.apiService.getTags((tags) => {
+      this.tags = tags
+    })
+  }
 
+  updateEvent() {
+    this.apiService.updateEvent(this.eventForm.getRawValue(), () => {
+      this.getMonthDates()
+      this.hideDialog.emit()
+    })
+  }
 
-
+  deleteEvent = () => {
+    this.apiService.deleteEvent(this.eventForm.getRawValue().id, () => {
+      this.getMonthDates()
+      this.hideDialog.emit()
+    })
+  }
 
 }

@@ -1,12 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { UserService } from '../../service/user.service';
+import { Component, OnInit } from '@angular/core';
 import { Modal } from 'bootstrap';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AlertService } from '../../service/alert.service';
-import { AlertType } from '../../model/alert';
+import { ApiService } from '../../service/api.service';
 
 @Component({
   selector: 'app-tags',
@@ -27,7 +23,7 @@ export class TagsComponent implements OnInit {
     color: new FormControl('#000000', [Validators.required])
   })
 
-  constructor(private httpClient: HttpClient, private alertService: AlertService) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     const element = document.getElementById('tagDialog') as Element
@@ -35,86 +31,30 @@ export class TagsComponent implements OnInit {
     this.getTags()
   }
 
-  getTags() {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.get(environment.endpoint + '/tag', { headers }).subscribe({
-      next: (res) => {
-        this.tags = res
-      },
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error getting tags',
-          type: AlertType.Error
-        })
-      }
+  getTags = () => {
+    this.apiService.getTags((tags) => {
+      this.tags = tags
     })
   }
 
   createTag() {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.post(environment.endpoint + '/tag', this.tag_form.getRawValue(), { headers }).subscribe({
-      next: (res) => {
-        this.getTags()
-        this.dialog?.hide()
-        this.alertService.showAlert({
-          message: 'Sucessfully added tag',
-          type: AlertType.Success
-        })
-      },
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error adding tag',
-          type: AlertType.Error
-        })
-      }
+    this.apiService.createTag(this.tag_form.getRawValue(), () => {
+      this.getTags()
+      this.dialog?.hide()
     })
   }
 
   updateTag() {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.patch(environment.endpoint + '/tag', { ...this.tag_form.getRawValue() }, { headers }  ).subscribe({
-      next: (res) => {
-        this.getTags()
-        this.dialog?.hide()
-        this.alertService.showAlert({
-          message: 'Sucessfully updated tag',
-          type: AlertType.Success
-        })
-      },
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error updating tag',
-          type: AlertType.Error
-        })
-      }
+    this.apiService.updateTag(this.tag_form.getRawValue(), () => {
+      this.getTags()
+      this.dialog?.hide()
     })
   }
 
   deleteTag() {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.delete(environment.endpoint + '/tag', { headers, body: { id: this.tag_form.getRawValue().id } }).subscribe({
-      next: (res) => {
-        this.getTags()
-        this.dialog?.hide()
-        this.alertService.showAlert({
-          message: 'Sucessfully deleted tag',
-          type: AlertType.Success
-        })
-      },
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error deleting tag',
-          type: AlertType.Error
-        })
-      }
+    this.apiService.deleteTag(this.tag_form.getRawValue().id, () => {
+      this.getTags()
+      this.dialog?.hide()
     })
   }
 

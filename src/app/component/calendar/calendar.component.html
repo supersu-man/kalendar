@@ -1,24 +1,24 @@
 <div class="container-fluid d-flex flex-column h-100 p-3">
-    <div class="row justify-content-center pb-3">
+    <div class="row justify-content-center">
         <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
             </svg>
         </div>
-        <div class="col-auto" role="button" (click)="prevMonth()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-            </svg>
-        </div>
-        <div class="col-auto text-center" style="width: 150px;">
-            <span class="mx-auto">{{year+'-'+month+'-01' | date: 'MMMM yyyy'}}</span>
-        </div>
-        <div class="col-auto" role="button" (click)="nextMonth()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-            </svg>
-        </div>
-        <div class="col-auto ms-auto" role="button" (click)="today()">
+        @if (view=='list') {
+            <div class="col-auto ms-auto" role="button" (click)="view='grid'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid" viewBox="0 0 16 16">
+                    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+                </svg>
+            </div>
+        } @else {
+            <div class="col-auto ms-auto" role="button" (click)="view='list'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                </svg>
+            </div>
+        }
+        <div class="col-auto ms-1" role="button" (click)="today()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-event" viewBox="0 0 16 16">
                 <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
                 <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
@@ -26,35 +26,78 @@
             </svg>
         </div>
     </div>
-    <div class="row flex-grow-1 rounded-4 px-1 py-2" style="background-color: #ECF6FF">
-        <div class="col-12 d-flex flex-column">
-            <div class="row grid text-center">
-                <div class="m-auto day-text">Sunday</div>
-                <div class="m-auto day-text">Monday</div>
-                <div class="m-auto day-text">Tuesday</div>
-                <div class="m-auto day-text">Wednesday</div>
-                <div class="m-auto day-text">Thursday</div>
-                <div class="m-auto day-text">Friday</div>
-                <div class="m-auto day-text">Saturday</div>
-            </div>
-            <div class="row grid flex-grow-1">
-                @for (item of items; track $index) {
-                    <div class="col position-relative">
-                        @if (item.fullDate) {
-                        <div class="card top-0 start-0 end-0 bottom-0 hover position-absolute m-1 rounded-3" [class]="todayDate == item.fullDate ? 'today': ''" style="overflow: hidden;" role="button" [routerLink]="item.fullDate | date: 'dd'">
-                                <div class="m-2 p-1 rounded-3 text-center" style="width: 35px;" [style]="todayDate == item.fullDate ? 'background-color: #a2ddff;': ''">
-                                    {{item.fullDate | date: 'dd'}}
-                                </div>
-                            <div class="text-end">
-                                @for (event of item.events; track $index) {
-                                <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">{{event.tag.name}}</div>
-                                }
-                            </div>
-                        </div>
-                        }
-                    </div>
-                    }
-            </div>
+    <div class="row align-items-center justify-content-center pb-3">
+        <div class="col-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16" role="button" (click)="prevMonth()">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+            </svg>
+        </div>
+        <div class="col-auto text-center" style="width: 180px;">
+            <span class="mx-auto">{{year+'-'+month+'-01' | date: 'MMMM yyyy'}}</span>
+        </div>
+        <div class="col-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16" role="button" (click)="nextMonth()">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
         </div>
     </div>
+    @if (view == 'grid') {
+        <div class="row flex-grow-1 rounded-4 px-1 py-2" style="background-color: #ECF6FF">
+            <div class="col-12 d-flex flex-column">
+                <div class="row grid text-center">
+                    <div class="m-auto day-text">Sunday</div>
+                    <div class="m-auto day-text">Monday</div>
+                    <div class="m-auto day-text">Tuesday</div>
+                    <div class="m-auto day-text">Wednesday</div>
+                    <div class="m-auto day-text">Thursday</div>
+                    <div class="m-auto day-text">Friday</div>
+                    <div class="m-auto day-text">Saturday</div>
+                </div>
+                <div class="row grid flex-grow-1">
+                    @for (item of items; track $index) {
+                        <div class="col position-relative">
+                            @if (item.fullDate) {
+                            <div class="card top-0 start-0 end-0 bottom-0 hover position-absolute m-1 rounded-3" [class]="todayDate == item.fullDate ? 'today': ''" style="overflow: hidden;" role="button" [routerLink]="item.fullDate | date: 'dd'">
+                                    <div class="m-2 p-1 rounded-3 text-center" style="width: 35px;" [style]="todayDate == item.fullDate ? 'background-color: #a2ddff;': ''">
+                                        {{item.fullDate | date: 'dd'}}
+                                    </div>
+                                <div class="text-end">
+                                    @for (event of item.events; track $index) {
+                                    <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">{{event.tag.name}}</div>
+                                    }
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        }
+                </div>
+            </div>
+        </div>
+    } @else {
+        @for (item of items; track $index) {
+            @if (item.events && item.events.length > 0) {
+                <div class="row">
+                    <div class="col-auto m-2 p-1 rounded-3" [style]="todayDate == item.fullDate ? 'background-color: #a2ddff;': ''">
+                        {{item.fullDate | date: 'dd MMMM yyyy'}}
+                    </div>
+                </div>
+                
+                @for (event of item.events; track $index) {
+                    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" style="background-color: #ECF6FF;" (click)="eventForm.patchValue(event);openDialog.emit();">
+                        <div class="col">
+                            {{event.tag.name}}
+                        </div>
+                        <div class="col-auto">
+                            <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+                        </div>
+                        <div class="col-12">
+                            {{event.description}}
+                        </div>
+                    </div>
+                }
+            }
+        }
+    }
 </div>
+
+<app-event-dialog [openModel]="openDialog" [hideModel]="hideDialog" [eventForm]="eventForm" [tags]="tags" (updateEvent)="updateEvent()" (deleteEvent)="deleteEvent()" />

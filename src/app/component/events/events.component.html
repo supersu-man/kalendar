@@ -20,7 +20,7 @@
 
 <div class="container">
     @for (event of events; track $index) {
-    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" (click)="eventForm.patchValue(event);dialog?.show()" style="background-color: #ECF6FF;">
+    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" (click)="eventForm.patchValue(event);openDialog.emit();" style="background-color: #ECF6FF;">
         <div class="col">
             {{event.tag.name}}
         </div>
@@ -40,55 +40,6 @@
 </div>
 }
 
-<button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3"
-    (click)="eventForm.reset();dialog?.show()">Add Event</button>
+<button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3" (click)="eventForm.reset();openDialog.emit()">Add Event</button>
 
-
-<div class="modal fade" id="eventDialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">{{eventForm.getRawValue().id ? 'Update event' : 'Add event'}}</h1>
-            </div>
-
-            <div class="modal-body container" [formGroup]="eventForm">
-                @if (tags.length == 0) {
-                <div class="row">
-                    <div class="col">
-                        No tags, please add them <a routerLink="/dashboard/tags" (click)="dialog?.hide()">here</a>.
-                    </div>
-                </div>
-                }
-                <div class="row py-1">
-                    <div class="col">
-                        <select class="form-select" formControlName="tag_id">
-                            @for (tag of tags; track $index) {
-                            <option [value]="tag.id">{{tag.name}}</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="row py-1">
-                    <div class="col">
-                        <textarea class="form-control" rows="3" formControlName="description"
-                            placeholder="Description"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                @if (eventForm.getRawValue().id) {
-                <button type="button" class="btn btn-danger me-auto" (click)="deleteEvent()">Delete</button>
-                }
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                    (click)="dialog?.hide()">Close</button>
-                <button type="button" class="btn btn-primary"
-                    (click)="eventForm.getRawValue().id ? updateEvent() : addEvent()"
-                    [disabled]="!eventForm.valid">{{eventForm.getRawValue().id ? 'Update' : 'Add'}}</button>
-            </div>
-
-        </div>
-    </div>
-</div>
+<app-event-dialog [openModel]="openDialog" [hideModel]="hideDialog" [eventForm]="eventForm" [tags]="tags" (addEvent)="addEvent()" (updateEvent)="updateEvent()" (deleteEvent)="deleteEvent()" />

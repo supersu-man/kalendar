@@ -69,6 +69,22 @@ export class ApiService {
     })
   }
 
+  searchEvent = (query: string, callback: (events: any) => void) => {
+    const token = localStorage.getItem('accessToken') as string
+    const headers = { Authorization: token }
+    const params = { query }
+    this.httpClient.get(environment.endpoint + '/event/search', { headers, params }).subscribe({
+      next: (events) => callback(events),
+      error: (err) => {
+        console.log(err)
+        this.alertService.showAlert({
+          message: 'Error getting events',
+          type: AlertType.Error
+        })
+      }
+    })
+  }
+
   addEvent = (body: any, year: number, month: number, date: number, callback: () => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
@@ -170,7 +186,6 @@ export class ApiService {
     })
   }
 
-
   deleteTag = (id: any, callback: () => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
@@ -191,8 +206,5 @@ export class ApiService {
       }
     })
   }
-
-
-
 
 }

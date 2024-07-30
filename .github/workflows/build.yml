@@ -37,7 +37,7 @@ jobs:
         with:
           mention-authors: false
           mention-new-contributors: false
-          include-compare: false
+          include-compare-link: false
           semver: false
 
       - name: Create Release

@@ -66,16 +66,14 @@ export class CalendarComponent implements OnInit {
   }
 
   nextMonth() {
-    const date = new Date()
-    date.setFullYear(this.year)
-    date.setMonth(this.month)
+    const date = new Date(`${this.year}-${this.month}-01`)
+    date.setMonth(date.getMonth()+1)
     this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
   }
 
   prevMonth() {
-    const date = new Date()
-    date.setFullYear(this.year)
-    date.setMonth(this.month-2)
+    const date = new Date(`${this.year}-${this.month}-01`)
+    date.setMonth(date.getMonth()-1)
     this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
   }
 

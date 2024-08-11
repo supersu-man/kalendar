@@ -37,6 +37,9 @@
             </div>
         </div>
         <div class="row align-items-center">
+            <div class="col fw-bolder">
+                {{event.title}}
+            </div>
             <div class="col-auto">
                 <div class="rounded-3 px-1" [style]="todayDate == event.date ? 'background-color: #a2ddff;': ''">
                     {{event.date | date: 'dd MMMM yyyy'}}

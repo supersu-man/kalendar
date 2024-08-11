@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit {
     id: new FormControl(null),
     date: new FormControl(null),
     tag_id: new FormControl(null, [Validators.required]),
+    title: new FormControl(null, [Validators.required]),
     description: new FormControl(null, [Validators.required])
   })
 

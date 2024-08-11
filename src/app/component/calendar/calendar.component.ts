@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../service/api.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
 
 @Component({
@@ -12,7 +12,8 @@ import { EventDialogComponent } from '../../common/event-dialog/event-dialog.com
     DatePipe,
     RouterModule,
     CommonModule,
-    EventDialogComponent
+    EventDialogComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './calendar.component.html',
   styles: ``
@@ -32,7 +33,11 @@ export class CalendarComponent implements OnInit {
     id: new FormControl(null),
     date: new FormControl(null),
     tag_id: new FormControl(null, [Validators.required]),
+    title: new FormControl(null, [Validators.required]),
     description: new FormControl(null, [Validators.required])
+  })
+  settingsForm = new FormGroup({
+    showTitles: new FormControl(false)
   })
   openDialog = new EventEmitter()
   hideDialog = new EventEmitter()

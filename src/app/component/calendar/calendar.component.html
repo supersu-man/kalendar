@@ -23,6 +23,10 @@
                 </svg>
             </div>
         }
+        <div class="col-auto form-check form-switch ms-1" [formGroup]="settingsForm">
+            <input class="form-check-input col" type="checkbox" role="button" formControlName="showTitles">
+            <div class="col">Tags</div>
+        </div>
         <div class="col-auto ms-1" role="button" (click)="today()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-event" viewBox="0 0 16 16">
                 <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
@@ -68,7 +72,13 @@
                                     </div>
                                 <div class="text-end">
                                     @for (event of item.events; track $index) {
-                                    <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">{{event.tag.name}}</div>
+                                    <div class="badge text-bg-primary mx-1" [style]="'background-color:'+ event.tag.color + ' !important'">
+                                        @if (settingsForm.controls.showTitles.value) {
+                                            {{event.title ? event.title : 'No title'}}
+                                        } @else {
+                                            {{event.tag.name}}
+                                        }
+                                    </div>
                                     }
                                 </div>
                             </div>
@@ -94,6 +104,9 @@
                         </div>
                         <div class="col-auto">
                             <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+                        </div>
+                        <div class="col-12 fw-bolder">
+                            {{event.title}}
                         </div>
                         <div class="col-12">
                             {{event.description}}

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
+import { SettingsService } from '../../service/settings.service';
 
 @Component({
   selector: 'app-calendar',
@@ -26,8 +27,6 @@ export class CalendarComponent implements OnInit {
   items: any = []
   todayDate = new DatePipe('en-US').transform(new Date(), 'yyyy-MM-dd')
 
-  view: 'grid' | 'list' = 'grid'
-
   tags: any = []
   eventForm = new FormGroup({
     id: new FormControl(null),
@@ -36,13 +35,10 @@ export class CalendarComponent implements OnInit {
     title: new FormControl(null, [Validators.required]),
     description: new FormControl(null, [Validators.required])
   })
-  settingsForm = new FormGroup({
-    showTitles: new FormControl(false)
-  })
   openDialog = new EventEmitter()
   hideDialog = new EventEmitter()
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, public settings: SettingsService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {

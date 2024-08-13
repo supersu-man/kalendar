@@ -1,7 +1,8 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { SupabaseService } from '../../service/supabase.service';
+import { SettingsService } from '../../service/settings.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,14 +10,14 @@ import { SupabaseService } from '../../service/supabase.service';
   imports: [
     DatePipe,
     RouterModule,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './dashboard.component.html',
   styles: ``
 })
 export class DashboardComponent {
 
-  constructor(private supabaseService: SupabaseService,) { }
+  constructor(private supabaseService: SupabaseService, public settingsService: SettingsService, public router: Router) { }
 
   logout = () => {
     this.supabaseService.signOut()

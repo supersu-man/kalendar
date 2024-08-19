@@ -2,9 +2,15 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../service/api.service';
-import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
 import { SettingsService } from '../../service/settings.service';
+import { CommonService } from '../../service/common.service';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { BadgeModule } from 'primeng/badge';
+import { defaultEventForm, Event } from '../../model/event';
+import { Tag } from '../../model/tag';
 
 @Component({
   selector: 'app-calendar',
@@ -14,7 +20,10 @@ import { SettingsService } from '../../service/settings.service';
     RouterModule,
     CommonModule,
     EventDialogComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ButtonModule,
+    CardModule,
+    BadgeModule
   ],
   templateUrl: './calendar.component.html',
   styles: ``
@@ -24,21 +33,14 @@ export class CalendarComponent implements OnInit {
   year = this.route.snapshot.paramMap.get('year') as unknown as number
   month = this.route.snapshot.paramMap.get('month') as unknown as number
 
-  items: any = []
+  items: {fullDate: string, events: Event[]}[] = []
   todayDate = new DatePipe('en-US').transform(new Date(), 'yyyy-MM-dd')
 
-  tags: any = []
-  eventForm = new FormGroup({
-    id: new FormControl(null),
-    date: new FormControl(null),
-    tag_id: new FormControl(null, [Validators.required]),
-    title: new FormControl(null, [Validators.required]),
-    description: new FormControl(null, [Validators.required])
-  })
-  openDialog = new EventEmitter()
-  hideDialog = new EventEmitter()
+  tags: Tag[] = []
+  eventForm = defaultEventForm()
+  openDialog = false
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, public settings: SettingsService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, public settings: SettingsService, public commonService: CommonService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -54,15 +56,15 @@ export class CalendarComponent implements OnInit {
     var firstDay = new Date(this.year, this.month-1, 1).getDay();
     this.items = []
     for (let index = 0; index < firstDay; index++) {
-      this.items.push({})
+      this.items.push({ fullDate: '', events: []})
     }
     for (let index = 0; index < daysInMonth; index++) {
-      this.items.push({ fullDate: `${new DatePipe('en-US').transform(this.year+'-'+this.month+'-'+(index+1), 'yyyy-MM-dd')}` })
+      this.items.push({ fullDate: `${new DatePipe('en-US').transform(this.year+'-'+this.month+'-'+(index+1), 'yyyy-MM-dd')}`, events: [] })
     }
     const sDate = `${this.year}-${this.month}-01`
     const eDate = `${this.year}-${this.month}-${daysInMonth}`
     this.apiService.getEventsRange(sDate, eDate, (events) => {
-      this.items.forEach((element: any) => element.events = events.filter((a: any) => a.date === element.fullDate));
+      this.items.forEach((element) => element.events = events.filter((a) => a.date === element.fullDate));
     })
   }
 
@@ -78,28 +80,21 @@ export class CalendarComponent implements OnInit {
     this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
   }
 
-  today() {
+  today = () => {
     this.router.navigateByUrl(`/dashboard/calendar`)
   }
 
-  getTags() {
-    this.apiService.getTags((tags) => {
-      this.tags = tags
+  getTags = () => {
+    this.apiService.getTags((tags, error) => {
+      if(!error) {
+        this.tags = tags
+      }
     })
   }
 
-  updateEvent() {
-    this.apiService.updateEvent(this.eventForm.getRawValue(), () => {
-      this.getMonthDates()
-      this.hideDialog.emit()
-    })
-  }
-
-  deleteEvent = () => {
-    this.apiService.deleteEvent(this.eventForm.getRawValue().id, () => {
-      this.getMonthDates()
-      this.hideDialog.emit()
-    })
+  openEventDialog = (event: Event ) => {
+    this.eventForm.patchValue(event)
+    this.openDialog = true
   }
 
 }

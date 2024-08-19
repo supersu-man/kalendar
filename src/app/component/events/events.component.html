@@ -1,48 +1,48 @@
-<div class="container-fluid p-3">
-    <div class="row mb-4">
-        <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
-            </svg>
+<div class="flex flex-column h-full overflow-auto pb-4">
+    <div class="grid grid-nogutter p-2 align-items-center">
+        <div class="col-auto">
+            <i class="pi pi-bars cursor-pointer" (click)="commonService.sidebarVisible=true"></i>
         </div>
-        <div class="col fs-5">
-            {{year+'-'+month+'-'+date | date: 'dd MMMM yyyy'}}
-        </div>
-        <div class="col-auto ms-auto" role="button" routerLink="../">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
-                <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
-                <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
-            </svg>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    @for (event of events; track $index) {
-    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" (click)="eventForm.patchValue(event);openDialog.emit();" style="background-color: #ECF6FF;">
-        <div class="col">
-            {{event.tag.name}}
+        <div class="col text-2xl px-3">
+            Events
         </div>
         <div class="col-auto">
-            <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
-        </div>
-        <div class="col-12 fw-bolder">
-            {{event.title}}
-        </div>
-        <div class="col-12">
-            {{event.description}}
+            <p-button label="Today" [rounded]="true" size="small" (click)="today()"/>
         </div>
     </div>
-    }
+    <div class="grid grid-nogutter p-2">
+        <div class="col text-2xl">
+            {{year+'-'+month+'-'+date | date: 'dd MMMM yyyy'}}
+        </div>
+    </div>
+
+    <div class="grid grid-nogutter p-2">
+        @for (event of events; track $index) {
+            <div class="col-12 p-2">
+                <div class="grid p-3 cursor-pointer border-round-lg" style="background-color: #ECF6FF;" (click)="updateEvent(event)">
+                    <div class="col">Tag: {{event.tag.name}}</div>
+                    <div class="col-auto">
+                        <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+                    </div>
+                    <div class="col-12">
+                        Title: {{event.title}}
+                    </div>
+                    <div class="col-12">
+                        Description: {{event.description}}
+                    </div>
+                </div>
+            </div>
+            }
+    </div>
 </div>
 
+
 @if (events.length == 0) {
-<div class="position-absolute start-50 top-50 translate-middle">
+<div class="absolute left-50 top-50 translate-middle">
     No events, add them.
 </div>
 }
 
-<button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3" (click)="eventForm.reset();openDialog.emit()">Add Event</button>
+<p-button class="absolute bottom-0 right-0 m-2" label="Add event" [rounded]="true" size="small" (click)="addEvent();"/>
 
-<app-event-dialog [openModel]="openDialog" [hideModel]="hideDialog" [eventForm]="eventForm" [tags]="tags" (addEvent)="addEvent()" (updateEvent)="updateEvent()" (deleteEvent)="deleteEvent()" />
+<app-event-dialog [(visible)]="openDialog" [eventForm]="eventForm" [tags]="tags" (success)="getEvents()"/>

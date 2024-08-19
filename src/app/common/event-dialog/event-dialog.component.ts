@@ -1,39 +1,75 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Modal } from 'bootstrap';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ApiService } from '../../service/api.service';
+import { MessageService } from 'primeng/api';
+import { defaultEventForm, Event } from '../../model/event';
+import { Tag } from '../../model/tag';
 
 @Component({
   selector: 'app-event-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DialogModule, ButtonModule, InputTextModule, DropdownModule, InputTextareaModule],
   templateUrl: './event-dialog.component.html',
   styles: ``
 })
-export class EventDialogComponent  implements OnInit {
+export class EventDialogComponent {
 
-  @Input() eventForm = new FormGroup({
-    id: new FormControl(null),
-    date: new FormControl(null),
-    tag_id: new FormControl(null, [Validators.required]),
-    title: new FormControl(null, [Validators.required]),
-    description: new FormControl(null, [Validators.required])
-  })
-  @Input() tags: any = []
-  @Input() openModel = new EventEmitter();
-  @Input() hideModel = new EventEmitter();
+  @Input() eventForm = defaultEventForm()
+  @Input() tags: Tag[] = []
+  @Input() visible = false
+  @Output() visibleChange = new EventEmitter<boolean>()
+  @Output() success = new EventEmitter();
 
-  @Output() deleteEvent = new EventEmitter();
-  @Output() updateEvent = new EventEmitter();
-  @Output() addEvent = new EventEmitter();
+  constructor(private apiService: ApiService, private messageService: MessageService) {}
 
-  dialog: Modal | undefined
+  saveEvent = () => {
+    if (this.eventForm.getRawValue().id) {
+      this.updateEvent()
+    } else {
+      this.addEvent()
+    }
+  }
 
-  ngOnInit() {
-    const element = document.getElementById('eventDialog') as Element
-    this.dialog = new Modal(element, {})
+  updateEvent = () => {
+    this.apiService.updateEvent(this.eventForm.getRawValue() as Event, (event, error) => {
+      if(!error) {
+        this.success.emit()
+        this.visible = false
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sucessfully updated event' });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed updating the event' });
+      }
+    })
+  }
 
-    this.openModel.subscribe(() => { this.dialog?.show() })
-    this.hideModel.subscribe(() => { this.dialog?.hide() })
+  addEvent = () => {
+    this.apiService.addEvent(this.eventForm.getRawValue() as Event, (event, error) => {
+      if(!error) {
+        this.success.emit()
+        this.visible = false
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sucessfully added event' });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed adding the event' });
+      }
+    })
+  }
+
+
+  deleteEvent = () => {
+    this.apiService.deleteEvent(this.eventForm.getRawValue().id as string, (event, error) => {
+      if(!error) {
+        this.success.emit()
+        this.visible = false
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sucessfully deleted event' });
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed deleting the event' });
+      }
+    })
   }
 
 }

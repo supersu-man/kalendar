@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@import "primeicons/primeicons.css";
 @font-face {
     font-family: Inter;
     src: url(assets/Inter.ttf) format("opentype");
@@ -9,23 +9,48 @@ html,
 body {
     height: 100%;
     font-family: 'Inter';
+    font-size: 14px;
+    margin: 0px;
 }
 
-.grid {
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (min-width: 768px) {
+    .container {
+        width: 750px;
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        width: 970px;
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        width: 1170px;
+    }
+}
+
+.p-card {
+    height: 100%;
+    background: bisque;
+}
+
+.calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
 }
 
-.hover {
-    transition: 300ms;
-}
-
-.hover:hover {
-    transform: scale(1.06);
-}
-
 .offcanvas-active-button {
     background-color: #a2ddff;
+}
+
+.translate-middle {
+    transform: translate(-50%, -50%);
 }
 
 @media screen and (max-width: 800px) {
@@ -36,12 +61,7 @@ body {
         font-size: 16px;
     }
     .badge {
-        width: 10px;
-        height: 10px;
         font-size: 0px !important;
-        border-radius: 50%;
-        line-height: 20px;
-        margin: 1px !important;
     }
     .today {
         background-color: #a2ddff;

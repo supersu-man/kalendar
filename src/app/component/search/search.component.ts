@@ -2,39 +2,35 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ApiService } from '../../service/api.service';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { CommonService } from '../../service/common.service';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { defaultEventForm, Event } from '../../model/event';
+import { Tag } from '../../model/tag';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, DatePipe],
+  imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, DatePipe, ButtonModule, InputTextModule, InputGroupModule],
   templateUrl: './search.component.html',
   styles: ``
 })
 export class SearchComponent implements OnInit {
 
-  events: any = []
-  tags: any = []
+  events: Event[] = []
+  tags: Tag[] = []
   todayDate = new DatePipe('en-US').transform(new Date(), 'yyyy-MM-dd')
 
-
-  openDialog = new EventEmitter()
-  hideDialog = new EventEmitter()
-  
-  eventForm = new FormGroup({
-    id: new FormControl(null),
-    date: new FormControl(null),
-    tag_id: new FormControl(null, [Validators.required]),
-    title: new FormControl(null, [Validators.required]),
-    description: new FormControl(null, [Validators.required])
-  })
-
+  openDialog = false
+  eventForm = defaultEventForm()
   searchForm = new FormGroup({
     query: new FormControl(null, [Validators.required])
   })
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, public commonService: CommonService, private router: Router) { }
 
   ngOnInit(): void {
       this.getTags()
@@ -42,34 +38,31 @@ export class SearchComponent implements OnInit {
   }
 
   getTags() {
-    this.apiService.getTags((tags) => {
-      this.tags = tags
+    this.apiService.getTags((tags, error) => {
+      if(!error) {
+        this.tags = tags
+      }
     })
   }
 
   search = () => {
     const query = this.searchForm.getRawValue().query
     if (query) {
-      this.apiService.searchEvent(query, (events) => {
-        this.events = events
+      this.apiService.searchEvent(query, (events, error) => {
+        if(!error) {
+          this.events = events
+        }
       })
     }
   }
-
-  updateEvent() {
-    this.apiService.updateEvent(this.eventForm.getRawValue(), () => {
-      this.search()
-      this.hideDialog.emit()
-    })
+  
+  today() {
+    this.router.navigateByUrl(`/dashboard/calendar`)
   }
 
-  deleteEvent = () => {
-    this.apiService.deleteEvent(this.eventForm.getRawValue().id, () => {
-      this.search()
-      this.hideDialog.emit()
-    })
+  updateEvent(event: Event) {
+    this.eventForm.patchValue(event)
+    this.openDialog = true
   }
   
-  
-
 }

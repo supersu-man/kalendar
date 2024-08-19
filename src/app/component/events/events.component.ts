@@ -1,14 +1,18 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../service/api.service';
 import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
+import { ButtonModule } from 'primeng/button';
+import { CommonService } from '../../service/common.service';
+import { Tag } from '../../model/tag';
+import { defaultEventForm, Event } from '../../model/event';
 
 @Component({
   selector: 'app-date',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule, RouterModule, EventDialogComponent],
+  imports: [DatePipe, ReactiveFormsModule, RouterModule, EventDialogComponent, ButtonModule],
   templateUrl: './events.component.html',
   styles: ``
 })
@@ -18,58 +22,48 @@ export class EventsComponent implements OnInit {
   month = this.route.snapshot.paramMap.get('month') as unknown as number
   year = this.route.snapshot.paramMap.get('year') as unknown as number
 
-  eventForm = new FormGroup({
-    id: new FormControl(null),
-    date: new FormControl(null),
-    tag_id: new FormControl(null, [Validators.required]),
-    title: new FormControl(null, [Validators.required]),
-    description: new FormControl(null, [Validators.required])
-  })
+  eventForm = defaultEventForm()
+  events: Event[] = []
+  tags: Tag[] = []
 
-  events: any = []
-  tags: any = []
-
-  openDialog = new EventEmitter()
-  hideDialog = new EventEmitter()
-
-  constructor(private apiService: ApiService, private route: ActivatedRoute) { }
+  openDialog = false
+  
+  constructor(private apiService: ApiService, private route: ActivatedRoute, public commonService: CommonService, private router: Router) { }
 
   ngOnInit(): void {
     this.getEvents()
     this.getTags()
   }
 
-  getTags() {
-    this.apiService.getTags((tags) => {
-      this.tags = tags
+  getTags = () => {
+    this.apiService.getTags((tags, error) => {
+      if(!error) {
+        this.tags = tags
+      }
     })
+  }
+
+  today = () => {
+    this.router.navigateByUrl(`/dashboard/calendar`)
   }
 
   getEvents = () => {
-    this.apiService.getEvents(this.year, this.month, this.date, (events) => {
-      this.events = events
+    this.apiService.getEvents(this.year, this.month, this.date, (events, error) => {
+      if(!error) {
+        this.events = events
+      }
     })
   }
 
-  deleteEvent = () => {
-    this.apiService.deleteEvent(this.eventForm.getRawValue().id, () => {
-      this.getEvents()
-      this.hideDialog.emit()
-    })
+  addEvent = () => {
+    this.eventForm.reset()
+    this.eventForm.controls.date.setValue(this.year+'-'+this.month+ '-'+this.date)
+    this.openDialog = true
   }
 
-  addEvent() {
-    this.apiService.addEvent(this.eventForm.getRawValue(), this.year, this.month, this.date, () => {
-      this.getEvents()
-      this.hideDialog.emit()
-    })
-  }
-
-  updateEvent() {
-    this.apiService.updateEvent(this.eventForm.getRawValue(), () => {
-      this.getEvents()
-      this.hideDialog.emit()
-    })
+  updateEvent = (event: Event) => {
+    this.eventForm.patchValue(event)
+    this.openDialog = true
   }
 
 }

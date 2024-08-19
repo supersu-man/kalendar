@@ -1,208 +1,155 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { AlertService } from './alert.service';
-import { AlertType } from '../model/alert';
+import { Event } from '../model/event';
+import { Tag } from '../model/tag';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
 
-  constructor(private httpClient: HttpClient, private alertService: AlertService) { }
+  constructor(private httpClient: HttpClient) { }
 
-  getEvents = (year: number, month: number, date: number, callback: (events: any) => void) => {
+  getEvents = (year: number, month: number, date: number, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     const params = { date: `${year}-${month}-${date}` }
     this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
       next: (res) => {
-        callback(res)
+        callback(res as Event[], null)
       },
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error getting events',
-          type: AlertType.Error
-        })
+      error: (err: HttpErrorResponse) => {
+        callback([], err)
       }
     })
   }
 
-  getEventsRange = (date: string, eDate: string, callback: (events: any) => void) => {
+  getEventsRange = (date: string, eDate: string, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     const params = { date, eDate }
     this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
-      next: (events: any) => {
-        callback(events)
+      next: (res) => {
+        callback(res as Event[], null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error getting events',
-          type: AlertType.Error
-        })
+        callback([], err)
       }
     })
   }
 
-  deleteEvent = (id: any, callback: () => void) => {
+  deleteEvent = (id: string, callback: (event: Event | null, error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     const body = { id }
     this.httpClient.delete(environment.endpoint + '/event', { body, headers }).subscribe({
       next: (res) => {
-        this.alertService.showAlert({
-          message: 'Sucessfully deleted event',
-          type: AlertType.Success
-        })
-        callback()
+        callback(res as Event, null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error deleting event',
-          type: AlertType.Error
-        })
+        callback(null, err)
       }
     })
   }
 
-  searchEvent = (query: string, callback: (events: any) => void) => {
+  searchEvent = (query: string, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     const params = { query }
     this.httpClient.get(environment.endpoint + '/event/search', { headers, params }).subscribe({
-      next: (events) => callback(events),
-      error: (err) => {
-        console.log(err)
-        this.alertService.showAlert({
-          message: 'Error getting events',
-          type: AlertType.Error
-        })
-      }
-    })
-  }
-
-  addEvent = (body: any, year: number, month: number, date: number, callback: () => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.post(environment.endpoint + '/event', { ...body, date: `${year}-${month}-${date}` }, { headers }).subscribe({
       next: (res) => {
-        this.alertService.showAlert({
-          message: 'Sucessfully added event',
-          type: AlertType.Success
-        })
-        callback()
+        callback(res as Event[], null)
       },
       error: (err) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error adding event',
-          type: AlertType.Error
-        })
+        callback([], err)
       }
     })
   }
 
-  updateEvent = (body: any, callback: () => void) => {
+  addEvent = (body: Event, callback: (event: Event | null, error: HttpErrorResponse | null) => void) => {
+    const token = localStorage.getItem('accessToken') as string
+    const headers = { Authorization: token }
+    this.httpClient.post(environment.endpoint + '/event', body, { headers }).subscribe({
+      next: (res) => {
+        callback(res as Event, null)
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err)
+        callback(null, err)
+      }
+    })
+  }
+
+  updateEvent = (body: Event, callback: (event: Event | null, error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     this.httpClient.patch(environment.endpoint + '/event', { ...body }, { headers }).subscribe({
       next: (res) => {
-        this.alertService.showAlert({
-          message: 'Sucessfully updating event',
-          type: AlertType.Success
-        })
-        callback()
+        callback(res as Event, null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error updating event',
-          type: AlertType.Error
-        })
+        callback(null, err)
       }
     })
   }
 
-  getTags = (callback: (tags: any) => void) => {
+  getTags = (callback: (tags: Tag[], error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     this.httpClient.get(environment.endpoint + '/tag', { headers }).subscribe({
       next: (res) => {
-        callback(res)
+        callback(res as Tag[], null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error getting tags',
-          type: AlertType.Error
-        })
+        callback([], err)
       }
     })
   }
 
-  createTag = (body: any, callback: () => void) => {
+  createTag = (body: Tag, callback: (tag: Tag | null, error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     this.httpClient.post(environment.endpoint + '/tag', body, { headers }).subscribe({
       next: (res) => {
-        this.alertService.showAlert({
-          message: 'Sucessfully added tag',
-          type: AlertType.Success
-        })
-        callback()
+        callback(res as Tag, null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error adding tag',
-          type: AlertType.Error
-        })
+        callback(null, err)
       }
     })
   }
 
-  updateTag = (body: any, callback: () => void) => {
+  updateTag = (body: Tag, callback: (tag: Tag | null, error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     this.httpClient.patch(environment.endpoint + '/tag', body, { headers }  ).subscribe({
       next: (res) => {
-        this.alertService.showAlert({
-          message: 'Sucessfully updated tag',
-          type: AlertType.Success
-        })
-        callback()
+        callback(res as Tag, null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error updating tag',
-          type: AlertType.Error
-        })
+        callback(null, err)
       }
     })
   }
 
-  deleteTag = (id: any, callback: () => void) => {
+  deleteTag = (id: string, callback: (tag: Tag | null, error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }
     this.httpClient.delete(environment.endpoint + '/tag', { headers, body: { id } }).subscribe({
       next: (res) => {
-        this.alertService.showAlert({
-          message: 'Sucessfully deleted tag',
-          type: AlertType.Success
-        })
-        callback()
+        callback(res as Tag, null)
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error deleting tag',
-          type: AlertType.Error
-        })
+        callback(null, err)
       }
     })
   }

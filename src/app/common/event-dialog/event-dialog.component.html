@@ -1,53 +1,31 @@
-<div class="modal fade" id="eventDialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">{{eventForm.getRawValue().id ? 'Update event' : 'Add event'}}</h1>
-            </div>
-
-            <div class="modal-body container" [formGroup]="eventForm">
-                @if (tags.length == 0) {
-                <div class="row">
-                    <div class="col">
-                        No tags, please add them <a routerLink="/dashboard/tags" (click)="dialog?.hide()">here</a>.
-                    </div>
-                </div>
-                }
-                <div class="row py-1">
-                    <div class="col">
-                        <select class="form-select" formControlName="tag_id">
-                            @for (tag of tags; track $index) {
-                            <option [value]="tag.id">{{tag.name}}</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="row py-1">
-                    <div class="col">
-                        <input type="text" class="form-control" rows="1" formControlName="title" placeholder="Title">
-                    </div>
-                </div>
-                <div class="row py-1">
-                    <div class="col">
-                        <textarea class="form-control" rows="3" formControlName="description"
-                            placeholder="Description"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                @if (eventForm.getRawValue().id) {
-                <button type="button" class="btn btn-danger me-auto" (click)="deleteEvent.emit()">Delete</button>
-                }
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                    (click)="dialog?.hide()">Close</button>
-                <button type="button" class="btn btn-primary"
-                    (click)="eventForm.getRawValue().id ? updateEvent.emit() : addEvent.emit()"
-                    [disabled]="!eventForm.valid">{{eventForm.getRawValue().id ? 'Update' : 'Add'}}</button>
-            </div>
-
+<p-dialog [header]="eventForm.getRawValue().id ? 'Update event' : 'Add event'" [modal]="true" [(visible)]="visible" [draggable]="false" [formGroup]="eventForm" (onHide)="visibleChange.emit(visible)">
+    @if (tags.length == 0) {
+        <div class="mb-5">
+            No tags, please add them <a href="/dashboard/tags">here</a>.
         </div>
+    }
+
+    <div class="flex align-items-center gap-3 my-2">
+        <label for="username" class="font-semibold w-6rem">Tag</label>
+        <p-dropdown [options]="tags" optionLabel="name" optionValue="id" placeholder="Select a Tag" formControlName="tag_id"/>
     </div>
-</div>
+
+    <div class="flex align-items-center gap-3 my-2">
+        <label class="font-semibold w-6rem">Title</label>
+        <input pInputText class="flex-auto" formControlName="title"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 mt-2">
+        <label class="font-semibold w-6rem">Description</label>
+        <textarea rows="5" pInputTextarea class="flex-auto" formControlName="description"></textarea>
+    </div>
+    
+    <p-footer class="flex">
+        @if (eventForm.getRawValue().id) {
+            <p-button label="Delete" severity="danger" size="small" (onClick)="deleteEvent()" />
+        }
+
+        <p-button class="ml-auto" label="Close" severity="secondary" size="small" (onClick)="visible = false" />
+        <p-button label="Save" size="small" (click)="saveEvent()" [disabled]="!eventForm.valid"/>
+    </p-footer>
+</p-dialog>

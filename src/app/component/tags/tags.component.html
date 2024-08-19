@@ -1,72 +1,52 @@
-<div class="container-fluid p-3">
-    <div class="row mb-4">
-        <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
-            </svg>
+<div class="flex flex-column h-full overflow-auto pb-4">
+    <div class="grid grid-nogutter p-2 align-items-center">
+        <div class="col-auto">
+            <i class="pi pi-bars cursor-pointer" (click)="commonService.sidebarVisible=true"></i>
         </div>
-        <div class="col fs-5">
+        <div class="col text-2xl px-3">
             Tags
         </div>
-    </div>
-</div>
-<div class="container">
-    @for (item of tags; track $index) {
-    <div class="row card d-flex flex-row rounded-3 align-items-center p-2 my-1" role="button" (click)="tag_form.patchValue(item);dialog?.show()" style="background-color: #ECF6FF;">
-        <div class="col-6">
-            {{item.name}}
-        </div>
-        <div class="col">
-            {{item.color}}
-        </div>
-        <div class="col">
-            <input type="color" class="form-control form-control-color" [value]="item.color" disabled>
+        <div class="col-auto">
+            <p-button label="Today" [rounded]="true" size="small" (click)="today()"/>
         </div>
     </div>
-    }
-</div>
-
-<button class="btn btn-primary btn-sm rounded-3 position-absolute bottom-0 end-0 m-3"
-    (click)="tag_form.reset({color: '#000000'});dialog?.show()">Create Tag</button>
-
-@if (tags.length == 0) {
-<div class="position-absolute start-50 top-50 translate-middle">
-    No tags, add them.
-</div>
-}
-
-<div class="modal fade" id="tagDialog" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h1 class="modal-title fs-5">{{tag_form.getRawValue().id ? 'Edit tag' : 'Create tag'}}</h1>
-            </div>
-
-            <div class="modal-body container" [formGroup]="tag_form">
-                <div class="row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Tag name" formControlName="name">
-                    </div>
-                    <div class="col-auto">
-                        <input type="color" class="form-control form-control-color" formControlName="color">
-                    </div>
+    <div class="grid grid-nogutter p-2">
+        @for (tag of tags; track $index) {
+        <div class="col-12 p-2">
+            <div class="grid p-3 cursor-pointer align-items-center border-round-lg" style="background-color: #ECF6FF;" (click)="tagForm.patchValue(tag); tagDialogVisible=true">
+                <div class="col">{{tag.name}}</div>
+                <div class="col-auto px-3">
+                    {{tag.color}}
+                </div>
+                <div class="col-auto">
+                    <input  type="color" [value]="tag.color" disabled>
                 </div>
             </div>
-
-            <div class="modal-footer">
-                @if (tag_form.getRawValue().id) {
-                <button type="button" class="btn btn-danger me-auto" (click)="deleteTag()">Delete</button>
-                }
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                    (click)="dialog?.hide()">Close</button>
-                <button type="button" class="btn btn-primary"
-                    (click)="tag_form.getRawValue().id ? updateTag() : createTag()"
-                    [disabled]="!tag_form.valid">{{tag_form.getRawValue().id ? 'Update' : 'Create'}}</button>
-            </div>
-
         </div>
+        }
     </div>
 </div>
+
+<p-button class="absolute bottom-0 right-0 m-2" label="Create tag" [rounded]="true" size="small" (click)="tagForm.reset({color: '#000000'});tagDialogVisible=true"/>
+
+@if (tags.length == 0) {
+    <div class="absolute left-50 top-50 translate-middle">
+        No tags, add them.
+    </div>
+}
+
+<p-dialog [header]="tagForm.getRawValue().id ? 'Update tag' : 'Create tag'" [modal]="true" [(visible)]="tagDialogVisible" [draggable]="false" [formGroup]="tagForm" [contentStyle]="{'overflow':'visible'}">
+    <div class="flex align-items-center gap-3 my-2">
+        <input pInputText class="flex-auto" formControlName="name" placeholder="Tag name"/>
+        <p-colorPicker formControlName="color"></p-colorPicker>
+    </div>
+    
+    <p-footer class="flex">
+        @if (tagForm.getRawValue().id) {
+            <p-button label="Delete" severity="danger" size="small" (onClick)="deleteTag()" />
+        }
+
+        <p-button class="ml-auto" label="Close" severity="secondary" size="small" (onClick)="tagDialogVisible = false" />
+        <p-button label="Save" size="small" (click)="saveTag()" [disabled]="!tagForm.valid"/>
+    </p-footer>
+</p-dialog>

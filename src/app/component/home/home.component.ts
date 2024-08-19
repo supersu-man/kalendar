@@ -3,45 +3,42 @@ import { RouterModule } from '@angular/router';
 import { SupabaseService } from '../../service/supabase.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import * as bootstrap from 'bootstrap';
-import { AlertService } from '../../service/alert.service';
-import { Alert, AlertType } from '../../model/alert';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     RouterModule,
+    ButtonModule,
+    DialogModule
   ],
   templateUrl: './home.component.html',
   styles: ``
 })
 export class HomeComponent implements OnInit {
 
-  modal: bootstrap.Modal | undefined
   isloggedIn = false
+  registerDialogVisible = false
 
-  constructor(private supabaseService: SupabaseService, private httpClient: HttpClient, private alertService: AlertService) { }
+  constructor(private supabaseService: SupabaseService, private httpClient: HttpClient, private messageService: MessageService) { }
 
   ngOnInit(): void {
-    const element = document.getElementById('registerModel') as Element
-    this.modal = new bootstrap.Modal(element, {})
 
     this.supabaseService.getAccessToken().then((token) => {
       if (!token) return
       this.httpClient.get(environment.endpoint + '/user', { headers: { Authorization: token } }).subscribe({
         next: (value) => {
           this.isloggedIn = true
-          this.modal?.hide()
+          this.registerDialogVisible = false
         },
         error: (err: HttpErrorResponse) => {
-          if (err.status == 404) this.modal?.show()
+          if (err.status == 404) this.registerDialogVisible = true
           else {
             console.log(err)
-            this.alertService.showAlert({
-              message: 'Error getting user',
-              type: AlertType.Error
-            })
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error getting user' });
           }
         }
       })
@@ -63,14 +60,11 @@ export class HomeComponent implements OnInit {
     this.httpClient.post(environment.endpoint + '/user', {}, { headers }).subscribe({
       next: (value) => {
         this.isloggedIn = true
-        this.modal?.hide()
+        this.registerDialogVisible = false
       },
       error: (err) => {
         console.log(err)
-        this.alertService.showAlert({
-          message: 'Error registering',
-          type: AlertType.Error
-        })
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error registering user' });
       }
     })
   }

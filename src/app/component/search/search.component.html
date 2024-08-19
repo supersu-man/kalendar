@@ -1,20 +1,49 @@
-<div class="container-fluid p-3">
-    <div class="row mb-4">
-        <div class="col-auto me-auto" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list"
-                viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
-            </svg>
+<div class="flex flex-column h-full overflow-auto pb-4">
+    <div class="grid grid-nogutter p-2 align-items-center">
+        <div class="col-auto">
+            <i class="pi pi-bars cursor-pointer" (click)="commonService.sidebarVisible=true"></i>
         </div>
-        <div class="col-auto ms-auto" role="button" routerLink="/dashboard/calendar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-event" viewBox="0 0 16 16">
-                <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
-                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
-                <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z"/>
-            </svg>
+        <div class="col text-2xl px-3">
+            Search
+        </div>
+        <div class="col-auto">
+            <p-button label="Today" [rounded]="true" size="small" (click)="today()"/>
         </div>
     </div>
+
+    <div class="grid grid-nogutter p-2 align-items-center gap-3 ">
+        <div class="col">
+            <p-inputGroup [formGroup]="searchForm">
+                <input type="text" pInputText placeholder="Search events" formControlName="query"/>
+                <button type="button" pButton icon="pi pi-search" (click)="search()"></button>
+            </p-inputGroup>
+        </div>
+    </div>
+
+    <div class="grid grid-nogutter p-2">
+        @for (event of events; track $index) {
+            <div class="col-12 p-2">
+                <div class="grid p-3 cursor-pointer border-round-lg" style="background-color: #ECF6FF;" (click)="updateEvent(event)">
+                    <div class="col">Tag: {{event.tag.name}}</div>
+                    <div class="col-auto">
+                        <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+                    </div>
+                    <div class="col-12">
+                        Title: {{event.title}}
+                    </div>
+                    <div class="col-12">
+                        Description: {{event.description}}
+                    </div>
+                </div>
+            </div>
+            }
+    </div>
 </div>
+
+
+<app-event-dialog [(visible)]="openDialog" [eventForm]="eventForm" [tags]="tags" (success)="search()"/>
+
+
 <div class="container pb-2">
     <div class="row" role="search">
         <div class="col" [formGroup]="searchForm">
@@ -27,7 +56,7 @@
 </div>
 <div class="container">
     @for (event of events; track $index) {
-    <div class="card rounded-3 p-2 my-3" role="button" (click)="eventForm.patchValue(event);openDialog.emit();" style="background-color: #ECF6FF;">
+    <div class="card rounded-3 p-2 my-3" role="button" (click)="eventForm.patchValue(event);" style="background-color: #ECF6FF;">
         <div class="row align-items-center">
             <div class="col">
                 {{event.tag.name}}
@@ -55,4 +84,4 @@
     }
 </div>
 
-<app-event-dialog [openModel]="openDialog" [hideModel]="hideDialog" [eventForm]="eventForm" [tags]="tags" (updateEvent)="updateEvent()" (deleteEvent)="deleteEvent()" />
+<!-- <app-event-dialog [openModel]="openDialog" [hideModel]="hideDialog" [eventForm]="eventForm" [tags]="tags" (updateEvent)="updateEvent()" (deleteEvent)="deleteEvent()" /> -->

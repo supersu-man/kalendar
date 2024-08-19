@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SupabaseService } from './service/supabase.service';
-import { AlertService } from './service/alert.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ToastModule],
   templateUrl: './app.component.html',
   styles: [],
 })
 export class AppComponent {
   title = 'Kalendar';
-  constructor(private supabaseService: SupabaseService, public alertService: AlertService) {
+  constructor(private supabaseService: SupabaseService) {
 
     this.supabaseService.supabaseClient.auth.onAuthStateChange((event, session) => {
       if (event == 'TOKEN_REFRESHED') {

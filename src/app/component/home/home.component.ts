@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit {
       next: (value) => {
         this.isloggedIn = true
         this.registerDialogVisible = false
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registered account successfully' });
       },
       error: (err) => {
         console.log(err)

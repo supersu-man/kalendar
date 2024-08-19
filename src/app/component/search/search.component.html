@@ -40,48 +40,10 @@
     </div>
 </div>
 
+@if (!events.length) {
+    <div class="absolute left-50 top-50 translate-middle text-center">
+        Search for events, tags, description
+    </div>
+}
 
 <app-event-dialog [(visible)]="openDialog" [eventForm]="eventForm" [tags]="tags" (success)="search()"/>
-
-
-<div class="container pb-2">
-    <div class="row" role="search">
-        <div class="col" [formGroup]="searchForm">
-            <input class="form-control" type="search" placeholder="Search for events" formControlName="query">
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-outline-success" type="submit" (click)="search()">Search</button>
-        </div>
-    </div>
-</div>
-<div class="container">
-    @for (event of events; track $index) {
-    <div class="card rounded-3 p-2 my-3" role="button" (click)="eventForm.patchValue(event);" style="background-color: #ECF6FF;">
-        <div class="row align-items-center">
-            <div class="col">
-                {{event.tag.name}}
-            </div>
-            <div class="col-auto">
-                <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
-            </div>
-        </div>
-        <div class="row align-items-center">
-            <div class="col fw-bolder">
-                {{event.title}}
-            </div>
-            <div class="col-auto">
-                <div class="rounded-3 px-1" [style]="todayDate == event.date ? 'background-color: #a2ddff;': ''">
-                    {{event.date | date: 'dd MMMM yyyy'}}
-                </div>
-            </div>
-        </div>
-        <div class="row pt-1">
-            <div class="col">
-                {{event.description}}
-            </div>
-        </div>
-    </div>
-    }
-</div>
-
-<!-- <app-event-dialog [openModel]="openDialog" [hideModel]="hideDialog" [eventForm]="eventForm" [tags]="tags" (updateEvent)="updateEvent()" (deleteEvent)="deleteEvent()" /> -->

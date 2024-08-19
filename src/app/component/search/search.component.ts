@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { defaultEventForm, Event } from '../../model/event';
 import { Tag } from '../../model/tag';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-search',
@@ -30,7 +31,7 @@ export class SearchComponent implements OnInit {
     query: new FormControl(null, [Validators.required])
   })
 
-  constructor(private apiService: ApiService, public commonService: CommonService, private router: Router) { }
+  constructor(private apiService: ApiService, public commonService: CommonService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit(): void {
       this.getTags()
@@ -51,6 +52,11 @@ export class SearchComponent implements OnInit {
       this.apiService.searchEvent(query, (events, error) => {
         if(!error) {
           this.events = events
+          if(!events.length) {
+            this.messageService.add({ severity: 'secondary', summary: 'No results', detail: 'No results available with this query' });
+          }
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error getting search results' });
         }
       })
     }

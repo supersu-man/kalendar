@@ -1,7 +1,10 @@
-<div class="flex flex-column h-full">
+<div class="flex flex-column h-full overflow-auto pb-4">
     <div class="grid grid-nogutter p-2 align-items-center">
-        <div class="col">
+        <div class="col-auto">
             <i class="pi pi-bars cursor-pointer" (click)="commonService.sidebarVisible=true"></i>
+        </div>
+        <div class="col text-2xl px-3">
+            Calendar
         </div>
         <div class="col-auto">
             <p-button label="Today" [rounded]="true" size="small" (click)="today()"/>
@@ -62,7 +65,7 @@
                     </div>
                     
                     @for (event of item.events; track $index) {
-                        <div class="grid border-round-lg p-2 my-1 cursor-pointer" style="background-color: #ECF6FF;" (click)="openEventDialog(event)">
+                        <div class="grid border-round-lg p-2 my-1 cursor-pointer" style="background-color: #ECF6FF;" (click)="openUpdateEventDialog(event)">
                             <div class="col">
                                 {{event.tag.name}}
                             </div>
@@ -79,8 +82,15 @@
                     }
                 }
             }
+            @if (isNoEventsThisMonth) {
+                <div class="absolute left-50 top-50 translate-middle"> No events this month </div>
+            }
         }
     </div>
+</div>
+
+<div class="absolute right-0 bottom-0 p-2">
+    <p-button label="Add event" [rounded]="true" size="small" (click)="openAddEventDialog()"/>
 </div>
 
 

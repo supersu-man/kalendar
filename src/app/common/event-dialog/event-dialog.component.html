@@ -1,4 +1,4 @@
-<p-dialog [header]="eventForm.getRawValue().id ? 'Update event' : 'Add event'" [modal]="true" [(visible)]="visible" [draggable]="false" [formGroup]="eventForm" (onHide)="visibleChange.emit(visible)">
+<p-dialog [header]="eventForm.getRawValue().id ? 'Update event' : 'Add event'" [modal]="true" [(visible)]="visible" [draggable]="false" [formGroup]="eventForm" (onHide)="visibleChange.emit(visible)" [contentStyle]="{'overflow':'visible'}" [focusOnShow]="false">
     @if (tags.length == 0) {
         <div class="mb-5">
             No tags, please add them <a href="/dashboard/tags">here</a>.
@@ -6,7 +6,12 @@
     }
 
     <div class="flex align-items-center gap-3 my-2">
-        <label for="username" class="font-semibold w-6rem">Tag</label>
+        <label class="font-semibold w-6rem">Date</label>
+        <p-calendar formControlName="date" dateFormat="yy-mm-dd" dataType="string"/>
+    </div>
+
+    <div class="flex align-items-center gap-3 my-2">
+        <label class="font-semibold w-6rem">Tag</label>
         <p-dropdown [options]="tags" optionLabel="name" optionValue="id" placeholder="Select a Tag" formControlName="tag_id"/>
     </div>
 

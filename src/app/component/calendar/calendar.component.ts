@@ -39,6 +39,7 @@ export class CalendarComponent implements OnInit {
   tags: Tag[] = []
   eventForm = defaultEventForm()
   openDialog = false
+  isNoEventsThisMonth = true
 
   constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, public settings: SettingsService, public commonService: CommonService) { }
 
@@ -52,6 +53,7 @@ export class CalendarComponent implements OnInit {
   }
 
   getMonthDates() {
+    this.isNoEventsThisMonth = true
     var daysInMonth = new Date(this.year, this.month, 0).getDate();
     var firstDay = new Date(this.year, this.month-1, 1).getDay();
     this.items = []
@@ -65,7 +67,11 @@ export class CalendarComponent implements OnInit {
     const eDate = `${this.year}-${this.month}-${daysInMonth}`
     this.apiService.getEventsRange(sDate, eDate, (events) => {
       this.items.forEach((element) => element.events = events.filter((a) => a.date === element.fullDate));
+      this.items.forEach((item) => {
+        if(item.events.length>0) this.isNoEventsThisMonth = false
+      })
     })
+    
   }
 
   nextMonth() {
@@ -92,8 +98,13 @@ export class CalendarComponent implements OnInit {
     })
   }
 
-  openEventDialog = (event: Event ) => {
+  openUpdateEventDialog = (event: Event ) => {
     this.eventForm.patchValue(event)
+    this.openDialog = true
+  }
+
+  openAddEventDialog = () => {
+    this.eventForm.reset()
     this.openDialog = true
   }
 

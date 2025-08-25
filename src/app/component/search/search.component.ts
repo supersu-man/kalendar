@@ -13,11 +13,10 @@ import { Tag } from '../../model/tag';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-search',
-  standalone: true,
-  imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, DatePipe, ButtonModule, InputTextModule, InputGroupModule],
-  templateUrl: './search.component.html',
-  styles: ``
+    selector: 'app-search',
+    imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, DatePipe, ButtonModule, InputTextModule, InputGroupModule],
+    templateUrl: './search.component.html',
+    styles: ``
 })
 export class SearchComponent implements OnInit {
 

@@ -12,11 +12,10 @@ import { Tag } from '../../model/tag';
 import { CalendarModule } from 'primeng/calendar';
 
 @Component({
-  selector: 'app-event-dialog',
-  standalone: true,
-  imports: [ReactiveFormsModule, DialogModule, ButtonModule, InputTextModule, DropdownModule, InputTextareaModule, CalendarModule],
-  templateUrl: './event-dialog.component.html',
-  styles: ``
+    selector: 'app-event-dialog',
+    imports: [ReactiveFormsModule, DialogModule, ButtonModule, InputTextModule, DropdownModule, TextareaModule, CalendarModule],
+    templateUrl: './event-dialog.component.html',
+    styles: ``
 })
 export class EventDialogComponent {
 

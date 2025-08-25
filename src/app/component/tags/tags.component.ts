@@ -12,11 +12,10 @@ import { defaultTagForm, Tag } from '../../model/tag';
 
 
 @Component({
-  selector: 'app-tags',
-  standalone: true,
-  imports: [ReactiveFormsModule, RouterModule, ButtonModule, ColorPickerModule, DialogModule, InputTextModule],
-  templateUrl: './tags.component.html',
-  styles: ``
+    selector: 'app-tags',
+    imports: [ReactiveFormsModule, RouterModule, ButtonModule, ColorPickerModule, DialogModule, InputTextModule],
+    templateUrl: './tags.component.html',
+    styles: ``
 })
 export class TagsComponent implements OnInit {
 

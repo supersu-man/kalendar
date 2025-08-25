@@ -8,15 +8,14 @@ import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    RouterModule,
-    ButtonModule,
-    DialogModule
-  ],
-  templateUrl: './home.component.html',
-  styles: ``
+    selector: 'app-home',
+    imports: [
+        RouterModule,
+        ButtonModule,
+        DialogModule
+    ],
+    templateUrl: './home.component.html',
+    styles: ``
 })
 export class HomeComponent implements OnInit {
 

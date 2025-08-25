@@ -4,11 +4,10 @@ import { SupabaseService } from './service/supabase.service';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, ToastModule],
-  templateUrl: './app.component.html',
-  styles: [],
+    selector: 'app-root',
+    imports: [RouterOutlet, ToastModule],
+    templateUrl: './app.component.html',
+    styles: []
 })
 export class AppComponent {
   title = 'Kalendar';

@@ -10,11 +10,10 @@ import { Tag } from '../../model/tag';
 import { defaultEventForm, Event } from '../../model/event';
 
 @Component({
-  selector: 'app-date',
-  standalone: true,
-  imports: [DatePipe, ReactiveFormsModule, RouterModule, EventDialogComponent, ButtonModule],
-  templateUrl: './events.component.html',
-  styles: ``
+    selector: 'app-date',
+    imports: [DatePipe, ReactiveFormsModule, RouterModule, EventDialogComponent, ButtonModule],
+    templateUrl: './events.component.html',
+    styles: ``
 })
 export class EventsComponent implements OnInit {
 

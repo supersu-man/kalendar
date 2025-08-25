@@ -13,20 +13,19 @@ import { defaultEventForm, Event } from '../../model/event';
 import { Tag } from '../../model/tag';
 
 @Component({
-  selector: 'app-calendar',
-  standalone: true,
-  imports: [
-    DatePipe,
-    RouterModule,
-    CommonModule,
-    EventDialogComponent,
-    ReactiveFormsModule,
-    ButtonModule,
-    CardModule,
-    BadgeModule
-  ],
-  templateUrl: './calendar.component.html',
-  styles: ``
+    selector: 'app-calendar',
+    imports: [
+        DatePipe,
+        RouterModule,
+        CommonModule,
+        EventDialogComponent,
+        ReactiveFormsModule,
+        ButtonModule,
+        CardModule,
+        BadgeModule
+    ],
+    templateUrl: './calendar.component.html',
+    styles: ``
 })
 export class CalendarComponent implements OnInit {
 

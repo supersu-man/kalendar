@@ -1,4 +1,107 @@
-<div class="absolute left-50 top-50 translate-middle">
+<nav class="container-fluid py-2 border-bottom">
+    <div class="row align-items-center">
+        <div class="col">
+            <div class="fw-bold">Kalendar</div>
+        </div>
+        <div class="col-auto">
+            <md-filled-button (click)="goToGithub()">View on GitHub</md-filled-button>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-8 display-5 fw-bold">
+            Your Personalized Habit & Event Companion
+        </div>
+    </div>
+    <div class="row my-4">
+        <div class="col-10">
+            Kalendar is a modern, open-source tool designed to help you track your habits and remember important events, all in one place. Built with the latest web technologies for a seamless experience.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="googleLoginButton"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row text-center">
+        <div class="col">
+            <div class="fw-bold fs-3">Key Features</div>
+            <div>Powerful tools to keep you organized and motivated</div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <div class="grid-container">
+                @for (item of coreFeatures; track $index) {
+                <div class="border rounded-4 p-3">
+                    <div class="primary-container align-items-center justify-content-center p-1 rounded-circle" style="display: inline-flex;">
+                        <span class="material-symbols-outlined primary-text">{{item.icon}}</span>
+                    </div>
+                    <div class="fw-bold">{{item.title}}</div>
+                    <div>{{item.description}}</div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container text-center py-5">
+    <div class="row">
+        <div class="col">
+            <div class="fw-bold fs-3">
+                Built with Modern Technology
+            </div>
+            <div>
+                Leveraging the best of the web for a fast, reliable and beautiful user experience.
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4 justify-content-center">
+        <div class="col-auto">
+            Angular
+        </div>
+        <div class="col-auto">
+            TypeScript
+        </div>
+        <div class="col-auto">
+            Material Web
+        </div>
+        <div class="col-auto">
+            Bootstrap
+        </div>
+        <div class="col-auto">
+            GitHub
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid text-center primary-container mt-5 py-5">
+    <div class="row">
+        <div class="col">
+            <div class="fs-3 fw-bold">Open Source & Community Driven</div>
+            <div class="my-2 px-3">Kalenda is free to use and open source. Contribute to its development, suggest new features, and be part of our growing community.</div>
+            <md-filled-button class="mt-3" (click)="goToGithub()">Star on GitHub</md-filled-button>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-3">
+    <div class="row">
+        <div class="col fw-bold">Kalendar</div>
+        <div role="button" class="col-auto" routerLink="/about">About</div>
+        <div role="button" class="col-auto" routerLink="/privacy">Privacy Policy</div>
+    </div>
+</div>
+
+
+
+<!-- <div class="absolute left-50 top-50 translate-middle">
     <div class="text-center grid">
         <div class="col-12">
             <img class="border-circle" src="assets/logo.jpg" width="160">
@@ -17,18 +120,6 @@
             }
         </div>
     </div>
-</div>
+</div> -->
 
-<div class="absolute bottom-0 right-0 p-2">
-    <a href="/privacy" class="pr-2">Privacy</a>
-    <a href="/about">About</a>
-</div>
 
-<p-dialog header="Register Account?" [modal]="true" [(visible)]="registerDialogVisible" [style]="{ width: '25rem' }">
-    <div class="block mb-5">Account doesn't exist with this email. Create a new account?</div>
-
-    <div class="flex justify-content-end gap-2">
-        <p-button label="No" severity="secondary" (click)="logout(); registerDialogVisible = false" size="small"/>
-        <p-button label="Yes" (click)="registerAccount()" size="small" />
-    </div>
-</p-dialog>

@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+@import url("./assets/theme/dark.css");
+@import url("./assets/theme/light.css");
+
 @font-face {
     font-family: Inter;
     src: url(assets/Inter.ttf) format("opentype");
@@ -7,63 +10,31 @@
 
 html,
 body {
-    height: 100%;
-    font-family: 'Inter';
-    font-size: 14px;
-    margin: 0px;
+    background-color: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
+    font-family: 'Inter' !important;
 }
 
-.container {
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
-}
-@media (min-width: 768px) {
-    .container {
-        width: 750px;
-    }
-}
-@media (min-width: 992px) {
-    .container {
-        width: 970px;
-    }
-}
-@media (min-width: 1200px) {
-    .container {
-        width: 1170px;
-    }
+
+md-filled-button {
+  font-family: 'Inter', sans-serif !important;
+  scale: 0.9;
 }
 
-.p-card {
-    height: 100%;
-    background: bisque;
-}
-
-.calendar-grid {
+.grid-container {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
 }
 
-.offcanvas-active-button {
-    background-color: #a2ddff;
+.card-background {
+    background-color: var(--md-sys-color-surface-container-highest);
 }
 
-.translate-middle {
-    transform: translate(-50%, -50%);
+.primary-text {
+    color: var(--md-sys-color-primary);
 }
 
-@media screen and (max-width: 800px) {
-    .day-text {
-        font-size: 0px;
-    }
-    .day-text::first-letter {
-        font-size: 16px;
-    }
-    .badge {
-        font-size: 0px !important;
-    }
-    .today {
-        background-color: #a2ddff;
-    }
-  }
+.primary-container {
+    background-color: var(--md-sys-color-primary-container);
+}

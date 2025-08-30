@@ -14,7 +14,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-search',
-    imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, DatePipe, ButtonModule, InputTextModule, InputGroupModule],
+    imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, ButtonModule, InputTextModule, InputGroupModule],
     templateUrl: './search.component.html',
     styles: ``
 })

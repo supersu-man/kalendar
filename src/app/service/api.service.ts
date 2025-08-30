@@ -11,6 +11,18 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) { }
 
+  signin = (googleToken: string) => {
+    return this.httpClient.post(environment.endpoint + '/user/signin', { jwtToken: googleToken })
+  }
+
+  register = (googleToken: string) => {
+    return this.httpClient.post(environment.endpoint + '/user/register', { jwtToken: googleToken })
+  }
+
+  getNewToken = (oldToken: string) => {
+    return this.httpClient.post(environment.endpoint + "/user/token", { accessToken: oldToken })
+  }
+
   getEvents = (year: number, month: number, date: number, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
     const headers = { Authorization: token }

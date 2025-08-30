@@ -1,14 +1,22 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { TokenService } from '../service/token.service';
 
 
 export const authGuard: CanActivateFn = async (route, state) => {
 
-  const routerService = inject(Router)
-  console.log(state.url)
+  const router = inject(Router)
+  const tokenService = inject(TokenService)
 
-  if(!localStorage.getItem('accessToken') && state.url != '/' && !state.url.includes('access')) {
-    routerService.navigate(['/'])
+  const token = tokenService.getToken()
+
+  if(!token && state.url != '/') {
+    router.navigate(["/"])
+    return false
+  }
+  
+  if(token && state.url == "/") {
+    router.navigate(["/dashboard"])
     return false
   }
 

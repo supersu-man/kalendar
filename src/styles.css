@@ -21,6 +21,11 @@ md-filled-button {
   scale: 0.9;
 }
 
+.my-font {
+  font-family: 'Inter', sans-serif;
+}
+
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, NgZone, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
@@ -47,7 +47,10 @@ export class HomeComponent implements OnInit {
     }
   ]
 
-  constructor(private apiService: ApiService, private router: Router, private confirmationService: ConfirmationService) { }
+  isRegisterDialogOpen = false
+  responseToken = ''
+
+  constructor(private apiService: ApiService, private router: Router, private ngZone: NgZone) { }
 
 
   goToGithub = () => {
@@ -71,46 +74,33 @@ export class HomeComponent implements OnInit {
   }
 
   handleCredentialResponse(response: any) {
-    console.log(response.credential)
     this.apiService.signin(response.credential).subscribe({
       next: (res) => {
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['/dashboard/calendar'])
       },
       error: (err: HttpErrorResponse) => {
         if(err.status == 404) {
-          this.registerDialog(response.credential)
+          this.responseToken = response.credential
+          this.ngZone.run(() => {
+            
+            this.isRegisterDialogOpen = true
+          });
+
         }
       }
     })
   }
 
-  registerDialog = (token: string) => {
-    console.log("check")
-    this.confirmationService.confirm({
-      message: 'Register account?',
-      header: 'Account not found',
-      icon: 'pi pi-info-circle',
-      rejectButtonProps: {
-          label: 'Cancel',
-          severity: 'secondary',
-          outlined: true,
+  registerAccount = () => {
+    this.apiService.register(this.responseToken).subscribe({
+      next: (res) => {
+        this.isRegisterDialogOpen = false
+        this.router.navigate(['/dashboard/calendar'])
       },
-      acceptButtonProps: {
-          label: 'Register',
-          severity: 'primary',
-      },
-      accept: () => {
-
-        this.apiService.register(token).subscribe({
-          next: (res) => {
-            this.router.navigate(['/dashboard'])
-          },
-          error: (err) => {}
-        })
-
-      },
-      reject: () => { },
-    });
+      error: (err) => {
+        this.isRegisterDialogOpen = false
+      }
+    })
   }
 
 }

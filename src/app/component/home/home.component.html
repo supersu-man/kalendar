@@ -100,26 +100,15 @@
 </div>
 
 
-
-<!-- <div class="absolute left-50 top-50 translate-middle">
-    <div class="text-center grid">
-        <div class="col-12">
-            <img class="border-circle" src="assets/logo.jpg" width="160">
-        </div>
-        <div class="col-12 text-6xl">
-            Welcome to Kalendar
-        </div>
-        <div class="col-12 text-2xl">
-            Remember all your events
-        </div>
-        <div class="col-12">
-            @if (isloggedIn) {
-            <p-button label="Dashboard" routerLink="/dashboard/calendar" size="small"/>
-            } @else {
-            <p-button label="Login" (click)="login()" size="small" />
-            }
-        </div>
-    </div>
-</div> -->
-
-
+<md-dialog [open]="isRegisterDialogOpen">
+  <div slot="headline" class="my-font">
+    Register account?
+  </div>
+  <form slot="content" class="my-font">
+    Account with this email doesnt exist.
+  </form>
+  <div slot="actions">
+    <md-text-button class="my-font" (click)="registerAccount()">Ok</md-text-button>
+    <md-text-button class="my-font" (click)="isRegisterDialogOpen = false">Cancel</md-text-button>
+  </div>
+</md-dialog>

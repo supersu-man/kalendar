@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { Tag } from '../../model/tag';
@@ -14,7 +13,6 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 @Component({
   selector: 'app-tags',
   imports: [
-    ReactiveFormsModule,
     RouterModule,
     HeaderComponent,
     MatButtonModule,

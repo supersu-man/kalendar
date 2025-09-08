@@ -10,13 +10,4 @@ export type Event = {
     description: string
 }
 
-export const defaultEventForm = () => {
-    return new FormGroup({
-        id: new FormControl(null as string | null),
-        date: new FormControl(null as string | null, [Validators.required]),
-        tag_id: new FormControl(null as string | null, [Validators.required]),
-        title: new FormControl(null as string | null, [Validators.required]),
-        description: new FormControl(null as string | null, [Validators.required])
-    })
-}
 

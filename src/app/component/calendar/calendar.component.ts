@@ -1,9 +1,7 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../service/api.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { defaultEventForm, Event } from '../../model/event';
 import { Tag } from '../../model/tag';
 import { HeaderComponent } from "../../common/header/header.component";
 import { MatButtonModule } from '@angular/material/button';
@@ -18,11 +16,9 @@ import { EventDialogComponent } from '../../common/event-dialog/event-dialog.com
     DatePipe,
     RouterModule,
     CommonModule,
-    ReactiveFormsModule,
     HeaderComponent,
     MatIconModule
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './calendar.component.html',
   styles: ``
 })
@@ -40,7 +36,6 @@ export class CalendarComponent implements OnInit {
   tags: Tag[] = []
 
   readonly dialog = inject(MatDialog);
-  isNoEventsThisMonth = true
 
   weekdays = [
     "Sunday",
@@ -148,7 +143,6 @@ export class CalendarComponent implements OnInit {
       dialogRef.componentInstance.eventForm.reset()
     })
   }
-
 
   getTags = () => {
     this.apiService.getTags().subscribe({

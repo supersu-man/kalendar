@@ -1,10 +1,8 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '../../service/api.service';
 import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
-import { ButtonModule } from 'primeng/button';
 import { Tag } from '../../model/tag';
 import { Event } from '../../model/event';
 import { HeaderComponent } from "../../common/header/header.component";
@@ -15,8 +13,7 @@ import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dial
 
 @Component({
   selector: 'app-date',
-  imports: [DatePipe, ReactiveFormsModule, RouterModule, ButtonModule, HeaderComponent, MatIconModule, MatButtonModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [DatePipe, RouterModule, HeaderComponent, MatIconModule, MatButtonModule],
   templateUrl: './events.component.html',
   styles: ``
 })

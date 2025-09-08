@@ -1,75 +1,44 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { TextareaModule } from 'primeng/textarea';
-import { ApiService } from '../../service/api.service';
-import { MessageService } from 'primeng/api';
-import { defaultEventForm, Event } from '../../model/event';
 import { Tag } from '../../model/tag';
-import { CalendarModule } from 'primeng/calendar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MAT_DATE_LOCALE, provideNativeDateAdapter} from '@angular/material/core';
+import {MatSelectModule} from '@angular/material/select';
 
 @Component({
-    selector: 'app-event-dialog',
-    imports: [ReactiveFormsModule, DialogModule, ButtonModule, InputTextModule, DropdownModule, TextareaModule, CalendarModule],
-    templateUrl: './event-dialog.component.html',
-    styles: ``
+  selector: 'app-event-dialog',
+  imports: [
+    MatButtonModule, 
+    MatDialogModule, 
+    MatProgressSpinnerModule, 
+    ReactiveFormsModule, 
+    MatInputModule, 
+    MatDatepickerModule,
+    MatSelectModule
+  ],
+  providers: [
+    provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+  ],
+  templateUrl: './event-dialog.component.html',
+  styles: ``
 })
 export class EventDialogComponent {
 
-  @Input() eventForm = defaultEventForm()
-  @Input() tags: Tag[] = []
-  @Input() visible = false
-  @Output() visibleChange = new EventEmitter<boolean>()
-  @Output() success = new EventEmitter();
+  @Output() onSaveClick = new EventEmitter()
+  loader = false
 
-  constructor(private apiService: ApiService, private messageService: MessageService) {}
-
-  saveEvent = () => {
-    if (this.eventForm.getRawValue().id) {
-      this.updateEvent()
-    } else {
-      this.addEvent()
-    }
-  }
-
-  updateEvent = () => {
-    this.apiService.updateEvent(this.eventForm.getRawValue() as Event, (event, error) => {
-      if(!error) {
-        this.success.emit()
-        this.visible = false
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sucessfully updated event' });
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed updating the event' });
-      }
-    })
-  }
-
-  addEvent = () => {
-    this.apiService.addEvent(this.eventForm.getRawValue() as Event, (event, error) => {
-      if(!error) {
-        this.success.emit()
-        this.visible = false
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sucessfully added event' });
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed adding the event' });
-      }
-    })
-  }
-
-
-  deleteEvent = () => {
-    this.apiService.deleteEvent(this.eventForm.getRawValue().id as string, (event, error) => {
-      if(!error) {
-        this.success.emit()
-        this.visible = false
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Sucessfully deleted event' });
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed deleting the event' });
-      }
-    })
-  }
+  eventForm = new FormGroup({
+    id: new FormControl(null as string | null),
+    date: new FormControl(null as string | Date | null, [Validators.required]),
+    tag_id: new FormControl(null as string | null, [Validators.required]),
+    title: new FormControl(null as string | null, [Validators.required]),
+    description: new FormControl(null as string | null, [Validators.required])
+  })
+  tags: Tag[] = []
 
 }

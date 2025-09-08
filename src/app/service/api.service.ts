@@ -23,49 +23,21 @@ export class ApiService {
     return this.httpClient.post(environment.endpoint + "/user/token", { accessToken: oldToken })
   }
 
-  getEvents = (year: number, month: number, date: number, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    const params = { date: `${year}-${month}-${date}` }
-    this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
-      next: (res) => {
-        callback(res as Event[], null)
-      },
-      error: (err: HttpErrorResponse) => {
-        callback([], err)
-      }
-    })
+  getEvents = (start_date: string, end_date: string) => {
+    return this.httpClient.get(environment.endpoint + '/event', { params: { start_date, end_date } })
   }
 
-  getEventsRange = (date: string, eDate: string, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    const params = { date, eDate }
-    this.httpClient.get(environment.endpoint + '/event', { headers, params }).subscribe({
-      next: (res) => {
-        callback(res as Event[], null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback([], err)
-      }
-    })
+  addEvent = (body: any) => {
+    return this.httpClient.post(environment.endpoint + '/event', body)
   }
 
-  deleteEvent = (id: string, callback: (event: Event | null, error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    const body = { id }
-    this.httpClient.delete(environment.endpoint + '/event', { body, headers }).subscribe({
-      next: (res) => {
-        callback(res as Event, null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback(null, err)
-      }
-    })
+  updateEvent = (body: Event) => {
+    return this.httpClient.patch(environment.endpoint + '/event', { ...body })
   }
+  deleteEvent = (id: string) => {
+    return this.httpClient.delete(environment.endpoint + '/event', { body: { id } })
+  }
+
 
   searchEvent = (query: string, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
     const token = localStorage.getItem('accessToken') as string
@@ -82,88 +54,20 @@ export class ApiService {
     })
   }
 
-  addEvent = (body: Event, callback: (event: Event | null, error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.post(environment.endpoint + '/event', body, { headers }).subscribe({
-      next: (res) => {
-        callback(res as Event, null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback(null, err)
-      }
-    })
+  getTags = () => {
+    return this.httpClient.get(environment.endpoint + '/tag')
   }
 
-  updateEvent = (body: Event, callback: (event: Event | null, error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.patch(environment.endpoint + '/event', { ...body }, { headers }).subscribe({
-      next: (res) => {
-        callback(res as Event, null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback(null, err)
-      }
-    })
+  createTag = (body: Tag) => {
+    return this.httpClient.post(environment.endpoint + '/tag', body)
   }
 
-  getTags = (callback: (tags: Tag[], error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.get(environment.endpoint + '/tag', { headers }).subscribe({
-      next: (res) => {
-        callback(res as Tag[], null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback([], err)
-      }
-    })
+  updateTag = (body: Tag) => {
+    return this.httpClient.patch(environment.endpoint + '/tag', body)
   }
 
-  createTag = (body: Tag, callback: (tag: Tag | null, error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.post(environment.endpoint + '/tag', body, { headers }).subscribe({
-      next: (res) => {
-        callback(res as Tag, null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback(null, err)
-      }
-    })
-  }
-
-  updateTag = (body: Tag, callback: (tag: Tag | null, error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.patch(environment.endpoint + '/tag', body, { headers }  ).subscribe({
-      next: (res) => {
-        callback(res as Tag, null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback(null, err)
-      }
-    })
-  }
-
-  deleteTag = (id: string, callback: (tag: Tag | null, error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    this.httpClient.delete(environment.endpoint + '/tag', { headers, body: { id } }).subscribe({
-      next: (res) => {
-        callback(res as Tag, null)
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err)
-        callback(null, err)
-      }
-    })
+  deleteTag = (id: string) => {
+    return this.httpClient.delete(environment.endpoint + '/tag', { body: { id } })
   }
 
 }

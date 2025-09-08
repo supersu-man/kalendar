@@ -14,7 +14,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-search',
-    imports: [ReactiveFormsModule, EventDialogComponent, RouterModule, ButtonModule, InputTextModule, InputGroupModule],
+    imports: [ReactiveFormsModule, RouterModule, ButtonModule, InputTextModule, InputGroupModule],
     templateUrl: './search.component.html',
     styles: ``
 })
@@ -38,11 +38,11 @@ export class SearchComponent implements OnInit {
   }
 
   getTags() {
-    this.apiService.getTags((tags, error) => {
-      if(!error) {
-        this.tags = tags
-      }
-    })
+    // this.apiService.getTags((tags, error) => {
+    //   if(!error) {
+    //     this.tags = tags
+    //   }
+    // })
   }
 
   search = () => {

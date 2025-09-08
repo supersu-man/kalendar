@@ -1,52 +1,49 @@
-<div class="flex flex-column h-full overflow-auto pb-4">
-    <div class="grid grid-nogutter p-2 align-items-center">
-        <div class="col-auto">
-            <i class="pi pi-bars cursor-pointer" (click)="commonService.sidebarVisible=true"></i>
-        </div>
-        <div class="col text-2xl px-3">
-            Tags
-        </div>
-        <div class="col-auto">
-            <p-button label="Today" [rounded]="true" size="small" (click)="today()"/>
-        </div>
+<div class="container py-2">
+    <app-header />
+    <div class="d-flex justify-content-between">
+        <div class="fs-3">Manage Tags</div>
+        <button mat-flat-button class="p-3" (click)="openUpdateTagDialog()">
+            <mat-icon>add</mat-icon>
+            <span>New Tag</span>
+        </button>
     </div>
-    <div class="grid grid-nogutter p-2">
-        @for (tag of tags; track $index) {
-        <div class="col-12 p-2">
-            <div class="grid p-3 cursor-pointer align-items-center border-round-lg" style="background-color: #ECF6FF;" (click)="tagForm.patchValue(tag); tagDialogVisible=true">
-                <div class="col">{{tag.name}}</div>
-                <div class="col-auto px-3">
-                    {{tag.color}}
-                </div>
-                <div class="col-auto">
-                    <input  type="color" [value]="tag.color" disabled>
-                </div>
-            </div>
-        </div>
-        }
+    <div class="d-flex border rounded-4 p-2 mt-2">
+        <table mat-table [dataSource]="tags" class="rounded-4">
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="color">
+                <th mat-header-cell *matHeaderCellDef>Color</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="position-relative" style="width: 86px; height: 24px;">
+                        <div class="d-flex h-100 opacity-25 rounded-pill" [style]="'background-color:' + element.color"></div>
+                        <div class="position-absolute d-flex top-0 w-100 h-100 align-items-center justify-content-center gap-1">
+                            <div [style.background-color]="element.color" style="padding: 5px;" class="rounded-circle"></div>
+                            <div>{{element.color}}</div>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="d-flex">
+                        <button mat-icon-button class="d-flex align-items-center" (click)="openUpdateTagDialog(element)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button class="d-flex align-items-center" (click)="openDeleteTagDialog(element.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
     </div>
 </div>
-
-<p-button class="absolute bottom-0 right-0 m-2" label="Create tag" [rounded]="true" size="small" (click)="tagForm.reset({color: '#000000'});tagDialogVisible=true"/>
-
-@if (tags.length == 0) {
-    <div class="absolute left-50 top-50 translate-middle">
-        No tags, add them.
-    </div>
-}
-
-<p-dialog [header]="tagForm.getRawValue().id ? 'Update tag' : 'Create tag'" [modal]="true" [(visible)]="tagDialogVisible" [draggable]="false" [formGroup]="tagForm" [contentStyle]="{'overflow':'visible'}">
-    <div class="flex align-items-center gap-3 my-2">
-        <input pInputText class="flex-auto" formControlName="name" placeholder="Tag name"/>
-        <p-colorPicker formControlName="color"></p-colorPicker>
-    </div>
-    
-    <p-footer class="flex">
-        @if (tagForm.getRawValue().id) {
-            <p-button label="Delete" severity="danger" size="small" (onClick)="deleteTag()" />
-        }
-
-        <p-button class="ml-auto" label="Close" severity="secondary" size="small" (onClick)="tagDialogVisible = false" />
-        <p-button label="Save" size="small" (click)="saveTag()" [disabled]="!tagForm.valid"/>
-    </p-footer>
-</p-dialog>

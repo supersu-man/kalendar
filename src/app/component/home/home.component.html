@@ -1,114 +1,82 @@
-<nav class="container-fluid py-2 border-bottom">
-    <div class="row align-items-center">
-        <div class="col">
-            <div class="fw-bold">Kalendar</div>
-        </div>
-        <div class="col-auto">
-            <md-filled-button (click)="goToGithub()">View on GitHub</md-filled-button>
-        </div>
-    </div>
+<nav class="d-flex align-items-center p-2">
+    <div class="fw-bold">Kalendar</div>
+    <button (click)="goToGithub()" mat-flat-button class="ms-auto p-3">View on GitHub</button>
 </nav>
 
-<div class="container py-5">
-    <div class="row">
-        <div class="col-8 display-5 fw-bold">
-            Your Personalized Habit & Event Companion
-        </div>
+<mat-divider></mat-divider>
+
+<div class="d-flex flex-column p-4">
+    <div class="display-5 fw-bold w-75">
+        Your Personalized Habit & Event Companion
     </div>
-    <div class="row my-4">
-        <div class="col-10">
-            Kalendar is a modern, open-source tool designed to help you track your habits and remember important events, all in one place. Built with the latest web technologies for a seamless experience.
-        </div>
+    <div class="col-10 w-75 mt-4">
+        Kalendar is a modern, open-source tool designed to help you track your habits and remember important events, all in one place. Built with the latest web technologies for a seamless experience.
     </div>
-    <div class="row">
-        <div class="col">
-            <div id="googleLoginButton"></div>
-        </div>
+    <div class="mt-4">
+        <div id="googleLoginButton"></div>
     </div>
 </div>
 
-<div class="container py-5">
-    <div class="row text-center">
-        <div class="col">
-            <div class="fw-bold fs-3">Key Features</div>
-            <div>Powerful tools to keep you organized and motivated</div>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col">
-            <div class="grid-container">
-                @for (item of coreFeatures; track $index) {
-                <div class="border rounded-4 p-3">
-                    <div class="primary-container align-items-center justify-content-center p-1 rounded-circle" style="display: inline-flex;">
-                        <span class="material-symbols-outlined primary-text">{{item.icon}}</span>
-                    </div>
-                    <div class="fw-bold">{{item.title}}</div>
-                    <div>{{item.description}}</div>
-                </div>
-                }
+<div class="d-flex flex-column text-center p-4">
+    <div class="fw-bold fs-3">Key Features</div>
+    <div>Powerful tools to keep you organized and motivated</div>
+
+    <div class="grid-container mt-3">
+        @for (item of coreFeatures; track $index) {
+        <div class="border rounded-4 p-3">
+            <div class="primary-container align-items-center justify-content-center p-1 rounded-circle" style="display: inline-flex;">
+                <span class="material-symbols-outlined primary-text">{{item.icon}}</span>
             </div>
+            <div class="fw-bold">{{item.title}}</div>
+            <div>{{item.description}}</div>
         </div>
+        }
     </div>
 </div>
 
-<div class="container text-center py-5">
-    <div class="row">
-        <div class="col">
-            <div class="fw-bold fs-3">
-                Built with Modern Technology
-            </div>
-            <div>
-                Leveraging the best of the web for a fast, reliable and beautiful user experience.
-            </div>
-        </div>
+<div class="d-flex flex-column text-center p-4">
+    <div class="fw-bold fs-3">
+        Built with Modern Technology
     </div>
-    <div class="row mt-4 justify-content-center">
-        <div class="col-auto">
-            Angular
-        </div>
-        <div class="col-auto">
-            TypeScript
-        </div>
-        <div class="col-auto">
-            Material Web
-        </div>
-        <div class="col-auto">
-            Bootstrap
-        </div>
-        <div class="col-auto">
-            GitHub
-        </div>
+    <div>
+        Leveraging the best of the web for a fast, reliable and beautiful user experience.
+    </div>
+    <div class="d-flex mt-4 justify-content-center gap-3">
+        <div>Angular</div>
+        <div>TypeScript</div>
+        <div>Material Web</div>
+        <div>Bootstrap</div>
+        <div>GitHub</div>
     </div>
 </div>
 
-<div class="container-fluid text-center primary-container mt-5 py-5">
-    <div class="row">
-        <div class="col">
-            <div class="fs-3 fw-bold">Open Source & Community Driven</div>
-            <div class="my-2 px-3">Kalenda is free to use and open source. Contribute to its development, suggest new features, and be part of our growing community.</div>
-            <md-filled-button class="mt-3" (click)="goToGithub()">Star on GitHub</md-filled-button>
-        </div>
+<div class="d-flex flex-column text-center p-4">
+    <div class="fs-3 fw-bold">Open Source & Community Driven</div>
+    <div class="my-2 px-3">Kalenda is free to use and open source. Contribute to its development, suggest new features, and be part of our growing community.</div>
+    <div>
+        <button (click)="goToGithub()" mat-flat-button class="mt-3">Star on GitHub</button>
     </div>
 </div>
 
-<div class="container-fluid py-3">
-    <div class="row">
-        <div class="col fw-bold">Kalendar</div>
-        <div role="button" class="col-auto" routerLink="/about">About</div>
-        <div role="button" class="col-auto" routerLink="/privacy">Privacy Policy</div>
-    </div>
+<div class="d-flex align-items-center gap-3 p-4">
+    <div class="fw-bold me-auto">Kalendar</div>
+
+    <button mat-button routerLink="/about">About</button>
+    <button mat-button routerLink="/privacy">Privacy Policy</button>
 </div>
 
 
-<md-dialog [open]="isRegisterDialogOpen">
-  <div slot="headline" class="my-font">
+
+
+<!-- <md-dialog [open]="isRegisterDialogOpen">
+  <div slot="headline">
     Register account?
   </div>
-  <form slot="content" class="my-font">
+  <form slot="content">
     Account with this email doesnt exist.
   </form>
   <div slot="actions">
-    <md-text-button class="my-font" (click)="registerAccount()">Ok</md-text-button>
-    <md-text-button class="my-font" (click)="isRegisterDialogOpen = false">Cancel</md-text-button>
+    <md-text-button (click)="registerAccount()">Ok</md-text-button>
+    <md-text-button (click)="isRegisterDialogOpen = false">Cancel</md-text-button>
   </div>
-</md-dialog>
+</md-dialog> -->

@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{config.heading}}</h2>
+<mat-dialog-content class="mat-typography">
+    <p>{{config.description}}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button cdkFocusInitial [disabled]="loader" (click)="onButtonClick.emit()">
+    @if (loader) {
+        <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+    } @else {
+        Ok
+    }
+  </button>
+</mat-dialog-actions>

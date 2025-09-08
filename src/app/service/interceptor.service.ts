@@ -19,7 +19,6 @@ export function sendTokenInterceptor(req: HttpRequest<unknown>, next: HttpHandle
     return next(req)
   }
   const token = inject(TokenService).getToken()
-  console.log(token, '\n', req.url)
   const reqWithHeader = req.clone({
     headers: req.headers.set('Authorization', token),
   });
@@ -36,7 +35,6 @@ export function saveTokenInterceptor(req: HttpRequest<unknown>, next: HttpHandle
     tap((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const newToken = event.headers.get('Authorization');
-        console.log('newToken', newToken)
         if(newToken) {
           tokenService.saveToken(newToken);
         }
@@ -56,7 +54,6 @@ export function refreshTokenInterceptor(req: HttpRequest<unknown>, next: HttpHan
   return next(req).pipe(
     catchError((err) => {
       if (err.status === 401) {
-        console.log("handleRefreshToken");
         return handleRefreshToken(req, next, tokenService, apiService)
       }
       return throwError(() => err);
@@ -68,7 +65,6 @@ export function refreshTokenInterceptor(req: HttpRequest<unknown>, next: HttpHan
 function handleRefreshToken(req: HttpRequest<unknown>, next: HttpHandlerFn, tokenService: TokenService, apiService: ApiService) {
   return apiService.getNewToken(tokenService.getToken()).pipe(
     switchMap((tokenObj: any) => {
-      console.log('refreshed token ', tokenObj)
       tokenService.saveToken(tokenObj.newToken);
       const reqWithHeader = req.clone({
         headers: req.headers.set('Authorization', tokenObj.newToken),
@@ -76,7 +72,6 @@ function handleRefreshToken(req: HttpRequest<unknown>, next: HttpHandlerFn, toke
       return next(reqWithHeader);
     }),
     catchError((refreshError) => {
-      console.error("Token refresh failed", refreshError);
       return throwError(() => refreshError);
     })
   );

@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{tagForm.getRawValue().id ? 'Edit Tag' : 'Add Tag'}}</h2>
+<mat-dialog-content class="d-flex flex-column" [formGroup]="tagForm">
+    <mat-form-field class="example-full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <mat-label>Colour</mat-label>
+        <input matInput type="color" formControlName="color">
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button cdkFocusInitial [disabled]="loader" (click)="onSaveClick.emit()">
+        @if (loader) {
+        <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+        } @else {
+        Ok
+        }
+    </button>
+</mat-dialog-actions>

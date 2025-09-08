@@ -10,15 +10,15 @@ export const authGuard: CanActivateFn = async (route, state) => {
 
   const token = tokenService.getToken()
 
-  if(!token && state.url != '/') {
-    router.navigate(["/"])
-    return false
-  }
+  // if(!token && state.url != '/') {
+  //   router.navigate(["/"])
+  //   return false
+  // }
   
-  if(token && state.url == "/") {
-    router.navigate(["/dashboard"])
-    return false
-  }
+  // if(token && state.url == "/") {
+  //   router.navigate(["/dashboard/calendar"])
+  //   return false
+  // }
 
   return true;
 };

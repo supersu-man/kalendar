@@ -1,110 +1,165 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
-import { SettingsService } from '../../service/settings.service';
-import { CommonService } from '../../service/common.service';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { BadgeModule } from 'primeng/badge';
 import { defaultEventForm, Event } from '../../model/event';
 import { Tag } from '../../model/tag';
+import { HeaderComponent } from "../../common/header/header.component";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { EventDialogComponent } from '../../common/event-dialog/event-dialog.component';
 
 @Component({
-    selector: 'app-calendar',
-    imports: [
-        DatePipe,
-        RouterModule,
-        CommonModule,
-        EventDialogComponent,
-        ReactiveFormsModule,
-        ButtonModule,
-        CardModule,
-        BadgeModule
-    ],
-    templateUrl: './calendar.component.html',
-    styles: ``
+  selector: 'app-calendar',
+  imports: [
+    MatButtonModule,
+    DatePipe,
+    RouterModule,
+    CommonModule,
+    ReactiveFormsModule,
+    HeaderComponent,
+    MatIconModule
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  templateUrl: './calendar.component.html',
+  styles: ``
 })
 export class CalendarComponent implements OnInit {
 
-  year = this.route.snapshot.paramMap.get('year') as unknown as number
-  month = this.route.snapshot.paramMap.get('month') as unknown as number
+  activatedRoute = inject(ActivatedRoute)
+  apiService = inject(ApiService)
+  router = inject(Router)
 
-  items: {fullDate: string, events: Event[]}[] = []
-  todayDate = new DatePipe('en-US').transform(new Date(), 'yyyy-MM-dd')
+  year = this.activatedRoute.snapshot.params['year']
+  month = this.activatedRoute.snapshot.params['month']
+  todayDate = new Date()
 
+  days: any[] = []
   tags: Tag[] = []
-  eventForm = defaultEventForm()
-  openDialog = false
+
+  readonly dialog = inject(MatDialog);
   isNoEventsThisMonth = true
 
-  constructor(private route: ActivatedRoute, private router: Router, private apiService: ApiService, public settings: SettingsService, public commonService: CommonService) { }
+  weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ]
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.year = params['year'] as number
-      this.month = params['month'] as number
-      this.getMonthDates()
+    this.activatedRoute.params.subscribe(params => {
+      this.year = params['year']
+      this.month = params['month']
+
+      this.getMonthDates(this.month, this.year)
+      this.getTags()
     })
-    this.getTags()
   }
 
-  getMonthDates() {
-    this.isNoEventsThisMonth = true
-    var daysInMonth = new Date(this.year, this.month, 0).getDate();
-    var firstDay = new Date(this.year, this.month-1, 1).getDay();
-    this.items = []
-    for (let index = 0; index < firstDay; index++) {
-      this.items.push({ fullDate: '', events: []})
+  getMonthDates = (month: number, year: number) => {
+    const days: any[] = [];
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const totalDays = new Date(year, month, 0).getDate();
+
+    const start_date = `${this.year}-${month}-01`
+    const end_date = `${this.year}-${this.month}-${totalDays}`
+
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
     }
-    for (let index = 0; index < daysInMonth; index++) {
-      this.items.push({ fullDate: `${new DatePipe('en-US').transform(this.year+'-'+this.month+'-'+(index+1), 'yyyy-MM-dd')}`, events: [] })
+    for (let i = 1; i <= totalDays; i++) {
+      days.push({ date: new Date(year, month - 1, i), events: [] });
     }
-    const sDate = `${this.year}-${this.month}-01`
-    const eDate = `${this.year}-${this.month}-${daysInMonth}`
-    this.apiService.getEventsRange(sDate, eDate, (events) => {
-      this.items.forEach((element) => element.events = events.filter((a) => a.date === element.fullDate));
-      this.items.forEach((item) => {
-        if(item.events.length>0) this.isNoEventsThisMonth = false
-      })
-    })
-    
-  }
 
-  nextMonth() {
-    const date = new Date(`${this.year}-${this.month}-01`)
-    date.setMonth(date.getMonth()+1)
-    this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
-  }
+    this.days = days
 
-  prevMonth() {
-    const date = new Date(`${this.year}-${this.month}-01`)
-    date.setMonth(date.getMonth()-1)
-    this.router.navigateByUrl(`/dashboard/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
-  }
+    const groupedEvents: any = {}
+    this.apiService.getEvents(start_date, end_date).subscribe({
+      next: (res: any) => {
+        // Group event based on days
+        for (let index = 0; index < res.length; index++) {
+          const element = res[index];
+          if(groupedEvents[element.date]) groupedEvents[element.date].push(element)
+          else groupedEvents[element.date] = [element]
+        }
 
-  today = () => {
-    this.router.navigateByUrl(`/dashboard/calendar`)
-  }
+        for (let index = 0; index < days.length; index++) {
+          const element = days[index];
+          if(!element) continue
+          const formattedDate = new DatePipe('en-US').transform(element.date, 'yyyy-MM-dd') || ''
+          if(groupedEvents[formattedDate]) element.events = groupedEvents[formattedDate]
+        }
 
-  getTags = () => {
-    this.apiService.getTags((tags, error) => {
-      if(!error) {
-        this.tags = tags
+        this.days = days 
+
+        console.log(this.days)
+      },
+      error: (err) => {
+        console.log(err)
       }
     })
   }
 
-  openUpdateEventDialog = (event: Event ) => {
-    this.eventForm.patchValue(event)
-    this.openDialog = true
+  nextMonth() {
+    const date = new Date(`${this.year}-${this.month}-01`)
+    date.setMonth(date.getMonth() + 1)
+    this.router.navigateByUrl(`/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
+  }
+
+  prevMonth() {
+    const date = new Date(`${this.year}-${this.month}-01`)
+    date.setMonth(date.getMonth() - 1)
+    this.router.navigateByUrl(`/calendar/${new DatePipe('en-US').transform(date, 'yyyy/MM')}`)
+  }
+
+  today = () => {
+    this.router.navigateByUrl(`/calendar/${new DatePipe('en-US').transform(new Date(), 'yyyy/MM')}`)
   }
 
   openAddEventDialog = () => {
-    this.eventForm.reset()
-    this.openDialog = true
+    const dialogRef = this.dialog.open(EventDialogComponent)
+    const dialogInstance = dialogRef.componentInstance
+    dialogInstance.tags = this.tags
+
+    dialogInstance.onSaveClick.subscribe(_ => {
+      const payload = dialogInstance.eventForm.getRawValue()
+      payload.date = new DatePipe('en-US').transform(payload.date, 'yyyy-MM-dd')
+      dialogInstance.loader = true
+      this.apiService.addEvent(payload).subscribe({
+        next: (res) => {
+          dialogRef.close()
+          this.getMonthDates(this.month, this.year)
+        },
+        error: (err) => {
+          dialogInstance.loader = false
+        }
+      })
+    })
+
+    dialogRef.afterClosed().subscribe(_ => {
+      dialogRef.componentInstance.loader = false
+      dialogInstance.tags = []
+      dialogRef.componentInstance.eventForm.reset()
+    })
+  }
+
+
+  getTags = () => {
+    this.apiService.getTags().subscribe({
+      next: (res: any) => {
+        console.log(res)
+        this.tags = res
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   }
 
 }

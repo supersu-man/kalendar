@@ -1,28 +1,34 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, NgZone, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from '../../service/api.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 
 declare const google: any;
 
 @Component({
-    selector: 'app-home',
-    imports: [
-        RouterModule,
-        ButtonModule,
-        DialogModule,
-        ConfirmDialogModule,
-        RouterLink
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    templateUrl: './home.component.html',
-    styles: ``
+  selector: 'app-home',
+  imports: [
+    RouterModule,
+    RouterLink,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatDividerModule,
+    MatDialogModule
+  ],
+  templateUrl: './home.component.html',
+  styles: ``
 })
 export class HomeComponent implements OnInit {
+
+  apiService = inject(ApiService)
+  router = inject(Router)
+
+  readonly dialog = inject(MatDialog);
 
   coreFeatures = [
     {
@@ -47,12 +53,6 @@ export class HomeComponent implements OnInit {
     }
   ]
 
-  isRegisterDialogOpen = false
-  responseToken = ''
-
-  constructor(private apiService: ApiService, private router: Router, private ngZone: NgZone) { }
-
-
   goToGithub = () => {
     window.location.href = "https://github.com/supersu-man/kalendar"
   }
@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
       client_id: '840522806158-sc7iiia4faejd7b3ir80jtn6dcv3u8s5.apps.googleusercontent.com',
       callback: this.handleCredentialResponse.bind(this)
     });
-    
+
     google.accounts.id.renderButton(
       document.getElementById("googleLoginButton"),
       { size: "large", text: "signin" }
@@ -76,30 +76,37 @@ export class HomeComponent implements OnInit {
   handleCredentialResponse(response: any) {
     this.apiService.signin(response.credential).subscribe({
       next: (res) => {
-        this.router.navigate(['/dashboard/calendar'])
+        this.router.navigate(['/calendar'])
       },
       error: (err: HttpErrorResponse) => {
-        if(err.status == 404) {
-          this.responseToken = response.credential
-          this.ngZone.run(() => {
-            
-            this.isRegisterDialogOpen = true
-          });
-
+        if (err.status == 404) {
+          this.showRegisterDialog(response.credential)
         }
       }
     })
   }
 
-  registerAccount = () => {
-    this.apiService.register(this.responseToken).subscribe({
-      next: (res) => {
-        this.isRegisterDialogOpen = false
-        this.router.navigate(['/dashboard/calendar'])
-      },
-      error: (err) => {
-        this.isRegisterDialogOpen = false
-      }
+  showRegisterDialog = (token: string) => {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent)
+    const dialogInstance = dialogRef.componentInstance
+    dialogInstance.config = { heading: 'Register account?', description: 'Account with this email doesnt exist.'}
+
+    dialogInstance.onButtonClick.subscribe(_ => {
+      dialogInstance.loader = true
+      this.apiService.register(token).subscribe({
+        next: (res) => {
+          dialogRef.close()
+          this.router.navigate(['/calendar'])
+        },
+        error: (err) => {
+          dialogRef.close()
+        }
+      })
+    })
+
+    dialogRef.afterClosed().subscribe(_ => {
+      dialogInstance.loader = false
+      dialogInstance.config = { heading: '', description: '' }
     })
   }
 

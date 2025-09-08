@@ -1,36 +1,35 @@
-<p-dialog [header]="eventForm.getRawValue().id ? 'Update event' : 'Add event'" [modal]="true" [(visible)]="visible" [draggable]="false" [formGroup]="eventForm" (onHide)="visibleChange.emit(visible)" [contentStyle]="{'overflow':'visible'}" [focusOnShow]="false">
-    @if (tags.length == 0) {
-        <div class="mb-5">
-            No tags, please add them <a href="/dashboard/tags">here</a>.
-        </div>
-    }
-
-    <div class="flex align-items-center gap-3 my-2">
-        <label class="font-semibold w-6rem">Date</label>
-        <p-calendar formControlName="date" dateFormat="yy-mm-dd" dataType="string"/>
-    </div>
-
-    <div class="flex align-items-center gap-3 my-2">
-        <label class="font-semibold w-6rem">Tag</label>
-        <p-dropdown [options]="tags" optionLabel="name" optionValue="id" placeholder="Select a Tag" formControlName="tag_id"/>
-    </div>
-
-    <div class="flex align-items-center gap-3 my-2">
-        <label class="font-semibold w-6rem">Title</label>
-        <input pInputText class="flex-auto" formControlName="title"/>
-    </div>
-
-    <div class="flex align-items-center gap-3 mt-2">
-        <label class="font-semibold w-6rem">Description</label>
-        <textarea rows="5" pInputTextarea class="flex-auto" formControlName="description"></textarea>
-    </div>
-    
-    <p-footer class="flex">
-        @if (eventForm.getRawValue().id) {
-            <p-button label="Delete" severity="danger" size="small" (onClick)="deleteEvent()" />
+<h2 mat-dialog-title>{{eventForm.getRawValue().id ? 'Edit Event' : 'Add Event'}}</h2>
+<mat-dialog-content class="d-flex flex-column" [formGroup]="eventForm">
+    <mat-form-field>
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" cdkAutosizeMinRows="2"></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Choose a Tag</mat-label>
+        <mat-select formControlName="tag_id">
+            @for (tag of tags; track $index) {
+            <mat-option [value]="tag.id">{{tag.name}}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button cdkFocusInitial [disabled]="loader" (click)="onSaveClick.emit()">
+        @if (loader) {
+        <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+        } @else {
+        Ok
         }
-
-        <p-button class="ml-auto" label="Close" severity="secondary" size="small" (onClick)="visible = false" />
-        <p-button label="Save" size="small" (click)="saveEvent()" [disabled]="!eventForm.valid"/>
-    </p-footer>
-</p-dialog>
+    </button>
+</mat-dialog-actions>

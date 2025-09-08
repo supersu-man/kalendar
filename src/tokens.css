@@ -1,0 +1,189 @@
+/* These tokens are generated using https://themes.angular-material.dev/ */
+/* Preview: https://themes.angular-material.dev/?bold-font-weight=700&brand-font-family=Roboto&medium-font-weight=500&plain-font-family=Roboto&regular-font-weight=400&seed-error=%23FF5449&seed-neutral=%23938F94&seed-neutral-variant=%23948F99&seed-primary=%236750A4&seed-secondary=%23958DA4&seed-tertiary=%23B58392 */
+/* Seed Colors: primary: #6750A4, secondary: #958DA4, tertiary: #B58392, error: #FF5449, neutral: #938F94, neutral-variant: #948F99 */
+/* Seed Typography: plain-font-family: Roboto, brand-font-family: Roboto, bold-font-weight: 700, medium-font-weight: 500, regular-font-weight: 400 */
+
+/* Make sure to import fonts in `<head>` of html */
+/*
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto&display=swap');
+</style>
+
+OR
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto&display=swap">
+*/
+
+/* Light Theme */
+:root, :host {
+  --mat-sys-primary: #6750a4;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #e9ddff;
+  --mat-sys-on-primary-container: #22005d;
+  --mat-sys-inverse-primary: #cfbcff;
+  --mat-sys-primary-fixed: #e9ddff;
+  --mat-sys-primary-fixed-dim: #cfbcff;
+  --mat-sys-on-primary-fixed: #22005d;
+  --mat-sys-on-primary-fixed-variant: #4f378a;
+  --mat-sys-secondary: #625b70;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-secondary-container: #e8def8;
+  --mat-sys-on-secondary-container: #1e192b;
+  --mat-sys-secondary-fixed: #e8def8;
+  --mat-sys-secondary-fixed-dim: #ccc2db;
+  --mat-sys-on-secondary-fixed: #1e192b;
+  --mat-sys-on-secondary-fixed-variant: #4a4458;
+  --mat-sys-tertiary: #7e5260;
+  --mat-sys-on-tertiary: #ffffff;
+  --mat-sys-tertiary-container: #ffd9e3;
+  --mat-sys-on-tertiary-container: #31101d;
+  --mat-sys-tertiary-fixed: #ffd9e3;
+  --mat-sys-tertiary-fixed-dim: #efb8c8;
+  --mat-sys-on-tertiary-fixed: #31101d;
+  --mat-sys-on-tertiary-fixed-variant: #633b48;
+  --mat-sys-background: #fdf8f8;
+  --mat-sys-on-background: #1c1b1c;
+  --mat-sys-surface: #fdf8f8;
+  --mat-sys-surface-dim: #ddd9d9;
+  --mat-sys-surface-bright: #fdf8f8;
+  --mat-sys-surface-container-lowest: #ffffff;
+  --mat-sys-surface-container-low: #f7f3f2;
+  --mat-sys-surface-container: #f1eded;
+  --mat-sys-surface-container-high: #ebe7e7;
+  --mat-sys-surface-container-highest: #e6e1e1;
+  --mat-sys-on-surface: #1c1b1c;
+  --mat-sys-shadow: #000000;
+  --mat-sys-scrim: #000000;
+  --mat-sys-surface-tint: #605d62;
+  --mat-sys-inverse-surface: #313030;
+  --mat-sys-inverse-on-surface: #f4f0f0;
+  --mat-sys-outline: #79767b;
+  --mat-sys-outline-variant: #cac5cb;
+  --mat-sys-neutral: #797676;
+  --mat-sys-neutral10: #1c1b1c;
+  --mat-sys-error: #ba1a1a;
+  --mat-sys-error-container: #ffdad6;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-on-error-container: #410002;
+  --mat-sys-surface-variant: #e6e1e7;
+  --mat-sys-on-surface-variant: #48464b;
+  --mat-sys-neutral-variant: #79767b;
+  --mat-sys-neutral-variant20: #322f34;
+  --mat-sys-inverse-secondary: #ccc2db;
+  --mat-sys-inverse-tertiary: #efb8c8;
+}
+
+/* Dark Theme */
+.dark {
+  --mat-sys-primary: #cfbcff;
+  --mat-sys-on-primary: #381e72;
+  --mat-sys-primary-container: #4f378a;
+  --mat-sys-on-primary-container: #e9ddff;
+  --mat-sys-inverse-primary: #6750a4;
+  --mat-sys-primary-fixed: #e9ddff;
+  --mat-sys-primary-fixed-dim: #cfbcff;
+  --mat-sys-on-primary-fixed: #22005d;
+  --mat-sys-on-primary-fixed-variant: #4f378a;
+  --mat-sys-secondary: #ccc2db;
+  --mat-sys-on-secondary: #332d40;
+  --mat-sys-secondary-container: #4a4458;
+  --mat-sys-on-secondary-container: #e8def8;
+  --mat-sys-secondary-fixed: #e8def8;
+  --mat-sys-secondary-fixed-dim: #ccc2db;
+  --mat-sys-on-secondary-fixed: #1e192b;
+  --mat-sys-on-secondary-fixed-variant: #4a4458;
+  --mat-sys-tertiary: #efb8c8;
+  --mat-sys-on-tertiary: #4a2532;
+  --mat-sys-tertiary-container: #633b48;
+  --mat-sys-on-tertiary-container: #ffd9e3;
+  --mat-sys-tertiary-fixed: #ffd9e3;
+  --mat-sys-tertiary-fixed-dim: #efb8c8;
+  --mat-sys-on-tertiary-fixed: #31101d;
+  --mat-sys-on-tertiary-fixed-variant: #633b48;
+  --mat-sys-background: #141313;
+  --mat-sys-on-background: #e6e1e1;
+  --mat-sys-surface: #141313;
+  --mat-sys-surface-dim: #141313;
+  --mat-sys-surface-bright: #3a3939;
+  --mat-sys-surface-container-lowest: #0f0e0e;
+  --mat-sys-surface-container-low: #1c1b1c;
+  --mat-sys-surface-container: #201f20;
+  --mat-sys-surface-container-high: #2b2a2a;
+  --mat-sys-surface-container-highest: #363435;
+  --mat-sys-on-surface: #e6e1e1;
+  --mat-sys-shadow: #000000;
+  --mat-sys-scrim: #000000;
+  --mat-sys-surface-tint: #cac5ca;
+  --mat-sys-inverse-surface: #e6e1e1;
+  --mat-sys-inverse-on-surface: #313030;
+  --mat-sys-outline: #938f95;
+  --mat-sys-outline-variant: #48464b;
+  --mat-sys-neutral: #797676;
+  --mat-sys-neutral10: #1c1b1c;
+  --mat-sys-error: #ffb4ab;
+  --mat-sys-error-container: #93000a;
+  --mat-sys-on-error: #690005;
+  --mat-sys-on-error-container: #ffdad6;
+  --mat-sys-surface-variant: #48464b;
+  --mat-sys-on-surface-variant: #cac5cb;
+  --mat-sys-neutral-variant: #79767b;
+  --mat-sys-neutral-variant20: #322f34;
+  --mat-sys-inverse-secondary: #625b70;
+  --mat-sys-inverse-tertiary: #7e5260;
+}
+
+/* Typography */
+:root, :host {
+  --mat-sys-brand-font-family: Roboto;
+  --mat-sys-plain-font-family: Roboto;
+  --mat-sys-bold-font-weight: 700;
+  --mat-sys-medium-font-weight: 500;
+  --mat-sys-regular-font-weight: 400;
+  --mat-sys-headline-large-font: var(--mat-sys-brand-font-family);
+  --mat-sys-headline-medium-font: var(--mat-sys-brand-font-family);
+  --mat-sys-headline-small-font: var(--mat-sys-brand-font-family);
+  --mat-sys-display-large-font: var(--mat-sys-brand-font-family);
+  --mat-sys-display-medium-font: var(--mat-sys-brand-font-family);
+  --mat-sys-display-small-font: var(--mat-sys-brand-font-family);
+  --mat-sys-title-large-font: var(--mat-sys-brand-font-family);
+  --mat-sys-body-large: var(--mat-sys-body-large-weight) var(--mat-sys-body-large-size) / var(--mat-sys-body-large-line-height) var(--mat-sys-body-large-font);
+  --mat-sys-body-medium: var(--mat-sys-body-medium-weight) var(--mat-sys-body-medium-size) / var(--mat-sys-body-medium-line-height) var(--mat-sys-body-medium-font);
+  --mat-sys-body-small: var(--mat-sys-body-small-weight) var(--mat-sys-body-small-size) / var(--mat-sys-body-small-line-height) var(--mat-sys-body-small-font);
+  --mat-sys-label-large: var(--mat-sys-label-large-weight) var(--mat-sys-label-large-size) / var(--mat-sys-label-large-line-height) var(--mat-sys-label-large-font);
+  --mat-sys-label-medium: var(--mat-sys-label-medium-weight) var(--mat-sys-label-medium-size) / var(--mat-sys-label-medium-line-height) var(--mat-sys-label-medium-font);
+  --mat-sys-label-small: var(--mat-sys-label-small-weight) var(--mat-sys-label-small-size) / var(--mat-sys-label-small-line-height) var(--mat-sys-label-small-font);
+  --mat-sys-title-large: var(--mat-sys-title-large-weight) var(--mat-sys-title-large-size) / var(--mat-sys-title-large-line-height) var(--mat-sys-title-large-font);
+  --mat-sys-title-medium: var(--mat-sys-title-medium-weight) var(--mat-sys-title-medium-size) / var(--mat-sys-title-medium-line-height) var(--mat-sys-title-medium-font);
+  --mat-sys-title-small: var(--mat-sys-title-small-weight) var(--mat-sys-title-small-size) / var(--mat-sys-title-small-line-height) var(--mat-sys-title-small-font);
+  --mat-sys-headline-large: var(--mat-sys-headline-large-weight) var(--mat-sys-headline-large-size) / var(--mat-sys-headline-large-line-height) var(--mat-sys-headline-large-font);
+  --mat-sys-headline-medium: var(--mat-sys-headline-medium-weight) var(--mat-sys-headline-medium-size) / var(--mat-sys-headline-medium-line-height) var(--mat-sys-headline-medium-font);
+  --mat-sys-headline-small: var(--mat-sys-headline-small-weight) var(--mat-sys-headline-small-size) / var(--mat-sys-headline-small-line-height) var(--mat-sys-headline-small-font);
+  --mat-sys-display-large: var(--mat-sys-display-large-weight) var(--mat-sys-display-large-size) / var(--mat-sys-display-large-line-height) var(--mat-sys-display-large-font);
+  --mat-sys-display-medium: var(--mat-sys-display-medium-weight) var(--mat-sys-display-medium-size) / var(--mat-sys-display-medium-line-height) var(--mat-sys-display-medium-font);
+  --mat-sys-display-small: var(--mat-sys-display-small-weight) var(--mat-sys-display-small-size) / var(--mat-sys-display-small-line-height) var(--mat-sys-display-small-font);
+  --mat-sys-body-large-font: var(--mat-sys-plain-font-family);
+  --mat-sys-body-medium-font: var(--mat-sys-plain-font-family);
+  --mat-sys-body-small-font: var(--mat-sys-plain-font-family);
+  --mat-sys-label-large-font: var(--mat-sys-plain-font-family);
+  --mat-sys-label-medium-font: var(--mat-sys-plain-font-family);
+  --mat-sys-label-small-font: var(--mat-sys-plain-font-family);
+  --mat-sys-title-medium-font: var(--mat-sys-plain-font-family);
+  --mat-sys-title-small-font: var(--mat-sys-plain-font-family);
+  --mat-sys-label-large-weight-prominent: var(--mat-sys-bold-font-weight);
+  --mat-sys-label-medium-weight-prominent: var(--mat-sys-bold-font-weight);
+  --mat-sys-label-large-weight: var(--mat-sys-medium-font-weight);
+  --mat-sys-label-medium-weight: var(--mat-sys-medium-font-weight);
+  --mat-sys-label-small-weight: var(--mat-sys-medium-font-weight);
+  --mat-sys-title-medium-weight: var(--mat-sys-medium-font-weight);
+  --mat-sys-title-small-weight: var(--mat-sys-medium-font-weight);
+  --mat-sys-body-large-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-body-medium-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-body-small-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-display-large-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-display-medium-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-display-small-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-headline-large-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-headline-medium-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-headline-small-weight: var(--mat-sys-regular-font-weight);
+  --mat-sys-title-large-weight: var(--mat-sys-regular-font-weight);
+}

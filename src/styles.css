@@ -1,28 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-@import "primeicons/primeicons.css";
-@import url("./assets/theme/dark.css");
-@import url("./assets/theme/light.css");
 
-@font-face {
-    font-family: Inter;
-    src: url(assets/Inter.ttf) format("opentype");
-}
-
-html,
-body {
-    background-color: var(--md-sys-color-surface);
-    color: var(--md-sys-color-on-surface);
-    font-family: 'Inter' !important;
-}
-
-
-md-filled-button {
-  font-family: 'Inter', sans-serif !important;
-  scale: 0.9;
-}
-
-.my-font {
-  font-family: 'Inter', sans-serif;
+html, body { height: 100%; }
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: var(--mat-sys-surface) !important;
+    color: var(--mat-sys-on-surface) !important;
 }
 
 
@@ -32,14 +15,30 @@ md-filled-button {
     gap: 10px;
 }
 
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
 .card-background {
-    background-color: var(--md-sys-color-surface-container-highest);
+    background-color: var(--mat-sys-primary-fixed);
 }
 
-.primary-text {
-    color: var(--md-sys-color-primary);
+.badge-colors {
+    background-color: var(--mat-sys-primary);
+    color: var(--mat-sys-on-primary);
 }
 
-.primary-container {
-    background-color: var(--md-sys-color-primary-container);
+
+@media (min-width: 600px) {
+  .hide-in-desktop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .hide-in-mobile {
+    display: none !important;
+  }
 }

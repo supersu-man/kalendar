@@ -14,7 +14,7 @@ export const routes: Routes = [
     { path: 'calendar', redirectTo: `calendar/${new DatePipe('en-US').transform(new Date(), 'yyyy/MM')}`, pathMatch: 'full'},
     { path: 'calendar/:year/:month', component: CalendarComponent },
     { path: 'calendar/:year/:month/:date', component: EventsComponent },
-    { path: 'search', component: SearchComponent },
+    { path: 'events', component: SearchComponent },
     { path: 'tags', component: TagsComponent },
     { path: 'privacy', component: PrivacyComponent },
     { path: 'about', component: AboutComponent }

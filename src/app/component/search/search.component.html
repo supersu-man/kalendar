@@ -1,48 +1,50 @@
-<!-- <div class="flex flex-column h-full overflow-auto pb-4">
-    <div class="grid grid-nogutter p-2 align-items-center">
-        <div class="col-auto">
-            <i class="pi pi-bars cursor-pointer" (click)="commonService.sidebarVisible=true"></i>
-        </div>
-        <div class="col text-2xl px-3">
-            Search
-        </div>
-        <div class="col-auto">
-            <p-button label="Today" [rounded]="true" size="small" (click)="today()"/>
-        </div>
+<div class="container py-2">
+
+    <app-header></app-header>
+
+    <div class="d-flex justify-content-between">
+        <div class="fs-3">Events</div>
+        <button mat-flat-button (click)="openAddEventDialog()">
+            <mat-icon>add</mat-icon>
+            <span>New Event</span>
+        </button>
     </div>
 
-    <div class="grid grid-nogutter p-2 align-items-center gap-3 ">
-        <div class="col">
-            <p-inputGroup [formGroup]="searchForm">
-                <input type="text" pInputText placeholder="Search events" formControlName="query"/>
-                <button type="button" pButton icon="pi pi-search" (click)="search()"></button>
-            </p-inputGroup>
-        </div>
-    </div>
+    <mat-form-field appearance="outline" class="w-100 mt-3" >
+        <mat-label>Search events</mat-label>
+        <input matInput [formControl]="query">
+        <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
 
-    <div class="grid grid-nogutter p-2">
-        @for (event of events; track $index) {
-            <div class="col-12 p-2">
-                <div class="grid p-3 cursor-pointer border-round-lg" style="background-color: #ECF6FF;" (click)="updateEvent(event)">
-                    <div class="col">Tag: {{event.tag.name}}</div>
-                    <div class="col-auto">
-                        <input type="color" class="form-control form-control-color" [value]="event.tag.color" disabled>
+    <div class="d-flex flex-column mt-2 gap-2">
+        @for (item of events; track $index) {
+        <div class="d-flex border rounded-3 py-2 px-3 align-items-center">
+            <div>
+                <div class="fs-5">{{item.title}}</div>
+                <div class="text-secondary small">{{item.description}}</div>
+                <div class="position-relative mt-1" style="width: 76px; height: 22px">
+                    <div class="d-flex h-100 opacity-25 rounded-pill" [style]="'background-color:' + item.tag.color">
                     </div>
-                    <div class="col-12">
-                        Title: {{event.title}}
-                    </div>
-                    <div class="col-12">
-                        Description: {{event.description}}
+                    <div
+                        class="position-absolute d-flex top-0 w-100 h-100 align-items-center justify-content-center gap-1">
+                        <div [style.background-color]="item.tag.color" style="padding: 5px;" class="rounded-circle">
+                        </div>
+                        <div class="small">{{item.tag.name}}</div>
                     </div>
                 </div>
             </div>
-            }
-    </div>
-</div>
 
-@if (!events.length) {
-    <div class="absolute left-50 top-50 translate-middle text-center">
-        Search for events, tags, description
+            <div class="d-flex align-items-center ms-auto">
+                <div>{{item.date | date: 'dd MMM yy'}}</div>
+                <button mat-icon-button class="d-flex align-items-center" (click)="openAddEventDialog(item)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="d-flex align-items-center" (click)="openDeleteTagDialog(item.id)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+        }
     </div>
-}
- -->
+
+</div>

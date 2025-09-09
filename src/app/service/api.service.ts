@@ -38,20 +38,8 @@ export class ApiService {
     return this.httpClient.delete(environment.endpoint + '/event', { body: { id } })
   }
 
-
-  searchEvent = (query: string, callback: (events: Event[], error: HttpErrorResponse | null) => void) => {
-    const token = localStorage.getItem('accessToken') as string
-    const headers = { Authorization: token }
-    const params = { query }
-    this.httpClient.get(environment.endpoint + '/event/search', { headers, params }).subscribe({
-      next: (res) => {
-        callback(res as Event[], null)
-      },
-      error: (err) => {
-        console.log(err)
-        callback([], err)
-      }
-    })
+  searchEvent = (query: string) => {
+    return this.httpClient.get(environment.endpoint + '/event/search', { params: { query } })
   }
 
   getTags = () => {

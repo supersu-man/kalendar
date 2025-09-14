@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../../service/api.service';
@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit {
 
   apiService = inject(ApiService)
   router = inject(Router)
+  ngZone = inject(NgZone)
 
   readonly dialog = inject(MatDialog);
 
@@ -76,7 +77,7 @@ export class HomeComponent implements OnInit {
   handleCredentialResponse(response: any) {
     this.apiService.signin(response.credential).subscribe({
       next: (res) => {
-        this.router.navigate(['/calendar'])
+         this.ngZone.run(() => { this.router.navigateByUrl('/calendar') })
       },
       error: (err: HttpErrorResponse) => {
         if (err.status == 404) {
